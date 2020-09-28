@@ -6,6 +6,8 @@ const App = () => {
     <Navigator />
   );
 };
-
+/*
+iltaa
+*/
 
 export default App;
