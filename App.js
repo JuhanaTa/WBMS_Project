@@ -5,7 +5,8 @@ import * as Expo from 'expo';
 import * as Font from 'expo-font';
 
 const App = () => {
-  /*const [fontReady, setFontReady] = useState(false);
+  /*
+  const [fontReady, setFontReady] = useState(false);
   const loadFonts = async () => {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
