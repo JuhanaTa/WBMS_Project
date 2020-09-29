@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from 'react';
+import {AuthProvider} from './contexts/AuthContext';
 import Navigator from './navigators/Navigator';
 import * as Expo from 'expo';
 import * as Font from 'expo-font';
@@ -25,11 +26,11 @@ const App = () => {
   }
 
   return (
-    <Navigator />
+    <AuthProvider>
+      <Navigator />
+    </AuthProvider>
+
   );
 };
-/*
-iltaa
-*/
 
 export default App;
