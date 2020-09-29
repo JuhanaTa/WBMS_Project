@@ -1,15 +1,16 @@
 
-import {Text} from 'native-base';
+
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
+import List from '../components/List';
 
 const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>This is home</Text>
+      <List />
     </SafeAreaView>
   );
 };
