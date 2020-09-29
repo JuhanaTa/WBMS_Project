@@ -5,7 +5,6 @@ import * as Expo from 'expo';
 import * as Font from 'expo-font';
 
 const App = () => {
-  /*
   const [fontReady, setFontReady] = useState(false);
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -23,7 +22,7 @@ const App = () => {
     return (
       <Expo.AppLoading />
     );
-  } */
+  }
 
   return (
     <Navigator />
