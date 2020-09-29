@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 
 const useLogin = async (user) => {

@@ -3,11 +3,11 @@ import {View, Button} from 'react-native';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useLogin} from '../hooks/APIservices';
+import {useRegistration, useLogin} from '../hooks/APIservices';
 import FormTextInput from './FormTxtInput';
 import useLoginForm from '../hooks/LoginServices';
 
-const LoginForm = ({navigation}) => {
+const RegisterForm = ({navigation}) => {
   // setUser,
   const {setUser, setIsLoggedIn} = useContext(AuthContext);
   const {
@@ -15,17 +15,21 @@ const LoginForm = ({navigation}) => {
     inputs,
   } = useLoginForm();
 
-  const doLogin = async () => {
+  const doRegister = async () => {
     console.log(inputs);
     try {
-      const userData = await useLogin(inputs);
-      setUser(userData.user);
-      console.log('user: ' + userData);
-      console.log('token: ' + userData.token);
+      const response = await useRegistration(inputs);
+      console.log('new user added');
+      console.log(response);
+      const userData = await useLogin({
+        username: inputs.username,
+        password: inputs.password,
+      });
       await AsyncStorage.setItem('UToken', userData.token);
       setIsLoggedIn(true);
+      setUser(userData.user);
     } catch (e) {
-      console.log('login error ', e.message);
+      console.log('register error ', e.message);
     }
   };
 
@@ -42,14 +46,23 @@ const LoginForm = ({navigation}) => {
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
-
-      <Button title="Login!" onPress={doLogin}/>
+      <FormTextInput
+        autoCapitalize="none"
+        placeholder="email"
+        onChangeText={(txt) => handleInputChange('email', txt)}
+      />
+      <FormTextInput
+        autoCapitalize="none"
+        placeholder="full name"
+        onChangeText={(txt) => handleInputChange('full_name', txt)}
+      />
+      <Button title="Login!" onPress={doRegister}/>
     </View>
   );
 };
 
-LoginForm.propTypes = {
+RegisterForm.propTypes = {
   navigation: PropTypes.object,
 };
 
-export default LoginForm;
+export default RegisterForm;
