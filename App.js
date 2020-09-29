@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import React, {useState, useEffect} from 'react';
+import {AuthProvider} from './contexts/AuthContext';
 import Navigator from './navigators/Navigator';
 import * as Expo from 'expo';
 import * as Font from 'expo-font';
 
 const App = () => {
-  /*
   const [fontReady, setFontReady] = useState(false);
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -23,14 +23,14 @@ const App = () => {
     return (
       <Expo.AppLoading />
     );
-  } */
+  }
 
   return (
-    <Navigator />
+    <AuthProvider>
+      <Navigator />
+    </AuthProvider>
+
   );
 };
-/*
-iltaa
-*/
 
 export default App;
