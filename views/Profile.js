@@ -29,7 +29,6 @@ const Profile = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
       <Button title={'Logout'} onPress={signOut} />
 
       <ListItem itemDivider style={styles.profile}>
@@ -40,6 +39,7 @@ const Profile = (props) => {
           <Text>Points: 9000</Text>
         </Body>
       </ListItem>
+
       <List></List>
 
     </SafeAreaView>
