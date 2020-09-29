@@ -18,7 +18,6 @@ import {Image} from 'react-native';
 const ListItem = (props) => {
   return (
     <Content>
-      <Image src="../assets/fire.svg" style="width: 200" />
       <Card>
         <CardItem>
         </CardItem>
