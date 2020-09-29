@@ -32,12 +32,12 @@ const ListItem = (props) => {
           </Body>
           <Right>
             <Button transparent>
-              <Icon style={{fontSize: 38}} active name='flame' />
+              <Icon name={'image'} />
             </Button>
           </Right>
           <Right>
             <Button transparent>
-              <Icon style={{fontSize: 38}} active name='ice-cream' />
+              <Icon name={'image'} />
             </Button>
           </Right>
         </CardItem>

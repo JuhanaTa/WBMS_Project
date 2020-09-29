@@ -8,15 +8,11 @@ import * as Font from 'expo-font';
 const App = () => {
   const [fontReady, setFontReady] = useState(false);
   const loadFonts = async () => {
-    try {
-      await Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      });
-      setFontReady(true);
-    } catch (e) {
-      console.log(e.message);
-    }
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+    setFontReady(true);
   };
   useEffect(() => {
     loadFonts();
