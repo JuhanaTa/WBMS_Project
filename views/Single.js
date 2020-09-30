@@ -4,8 +4,9 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
-const Home = () => {
+const Single = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>This is Single</Text>
@@ -20,5 +21,8 @@ const styles = StyleSheet.create({
   },
 });
 
+Single.propTypes = {
+  navigation: PropTypes.object,
+};
 
-export default Home;
+export default Single;

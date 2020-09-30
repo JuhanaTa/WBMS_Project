@@ -43,7 +43,7 @@ const LoginForm = ({navigation}) => {
         secureTextEntry={true}
       />
 
-      <Button title="Login!" onPress={doLogin}/>
+      <Button title="Login!" onPress={doLogin} />
     </View>
   );
 };
