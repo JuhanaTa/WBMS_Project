@@ -1,5 +1,6 @@
-import {useEffect, useState} from 'react';
 
+import {useEffect, useState} from 'react';
+import axios from 'axios';
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 const appIdentifier = 'juhkuAPP';
 
@@ -27,6 +28,7 @@ const useLoadMedia = () => {
 
   return mediaArray;
 };
+
 
 
 const useLogin = async (user) => {
@@ -88,10 +90,47 @@ const tokenCheck = async (token) => {
   }
 };
 
+const upload = async (fd, token) => {
+  const options = {
+    method: 'POST',
+    headers: {'x-access-token': token},
+    data: fd,
+    url: apiUrl + 'media',
+  };
+  try {
+    const response = await axios(options);
+    return response.data;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+const setTag = async (tag, token) => {
+  const options = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'x-access-token': token},
+    body: JSON.stringify(tag),
+  };
+  try {
+    console.log(tag);
+    const response = await fetch(apiUrl+ 'tags', options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
 
 export {
   useLogin,
   tokenCheck,
   useRegistration,
   useLoadMedia,
+  upload,
+  setTag,
+  appIdentifier,
 };
