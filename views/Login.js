@@ -18,7 +18,7 @@ const Login = (props) => { // props is needed for navigation
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('UToken');
-    console.log('logged in?: ' +isLoggedIn);
+    console.log('logged in?: ' + isLoggedIn);
     console.log('token', userToken);
     if (userToken) {
       try {
@@ -37,8 +37,8 @@ const Login = (props) => { // props is needed for navigation
   return (
     <View style={styles.container}>
       {showReg ?
-        <LoginForm navigation={props.navigation}/>:
-        <RegisterForm navigation={props.navigation}/>
+        <LoginForm navigation={props.navigation} /> :
+        <RegisterForm navigation={props.navigation} />
       }
       <Button title={showReg ? 'Register' : 'Login'} onPress={() => {
         setShowReg(!showReg);

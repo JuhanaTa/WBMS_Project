@@ -14,19 +14,22 @@ import {
 } from 'native-base';
 import {Image} from 'react-native';
 
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const ListItem = (props) => {
+
+const ListItem = ({navigation, singleMedia}) => {
+  // console.log({singleMedia});
   return (
     <Content>
       <Card>
         <CardItem>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{uri: props.singleMedia.thumbnails.w160}} style={{height: 200, width: null, flex: 1}} />
+          <Image source={{uri: mediaUrl + singleMedia.filename}} style={{height: 250, width: null, flex: 1}} />
         </CardItem>
         <CardItem>
           <Left>
-            <Text>{props.singleMedia.title}</Text>
+            <Text>{singleMedia.title}</Text>
           </Left>
           <Body>
           </Body>
@@ -49,6 +52,7 @@ const ListItem = (props) => {
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default ListItem;
