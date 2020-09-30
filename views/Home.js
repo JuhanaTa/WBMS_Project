@@ -6,8 +6,9 @@ import {
 import List from '../components/List';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import PropTypes from 'prop-types';
 
-const Home = () => {
+const Home = (props) => {
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
   const getLocation = async () => {
@@ -30,9 +31,12 @@ const Home = () => {
 
   console.log('latitude in home: ', userLatitude);
   console.log('longitude in home: ', userLongitude);
+  const {navigation} = props;
   return (
     <SafeAreaView style={styles.container}>
-      <List userLatitude={userLatitude} userLongitude={userLongitude}/>
+      <List navigation={navigation}
+        userLatitude={userLatitude}
+        userLongitude={userLongitude}/>
     </SafeAreaView>
   );
 };
@@ -43,6 +47,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
+
+Home.propTypes = {
+  navigation: PropTypes.object,
+};
 
 
 export default Home;
