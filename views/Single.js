@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 });
 
 Single.propTypes = {
-  navigation: PropTypes.object,
+  navigation: PropTypes.str,
 };
 
 export default Single;

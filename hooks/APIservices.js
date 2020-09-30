@@ -30,7 +30,6 @@ const useLoadMedia = () => {
 };
 
 
-
 const useLogin = async (user) => {
   console.log('credentials: ' + user);
   const options = {
@@ -113,7 +112,7 @@ const setTag = async (tag, token) => {
   };
   try {
     console.log(tag);
-    const response = await fetch(apiUrl+ 'tags', options);
+    const response = await fetch(apiUrl + 'tags', options);
     const result = await response.json();
     if (response.ok) {
       return result;
