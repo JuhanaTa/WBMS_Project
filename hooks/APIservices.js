@@ -2,7 +2,7 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
-const appIdentifier = 'juhkuAPP';
+const appIdentifier = 'juhkuTest2';
 
 const useLoadMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
@@ -28,7 +28,6 @@ const useLoadMedia = () => {
 
   return mediaArray;
 };
-
 
 const useLogin = async (user) => {
   console.log('credentials: ' + user);

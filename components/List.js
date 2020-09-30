@@ -6,7 +6,7 @@ import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 
 
-const List = ({navigation}) => {
+const List = ({navigation, userLatitude, userLongitude}) => {
   const mediaArray = useLoadMedia();
 
   return (
@@ -14,7 +14,7 @@ const List = ({navigation}) => {
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) =>
-        <ListItem singleMedia={item} navigation={navigation} />
+        <ListItem singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
       }
     />
   );
@@ -22,6 +22,8 @@ const List = ({navigation}) => {
 
 List.propTypes = {
   navigation: PropTypes.object,
+  userLatitude: PropTypes.number,
+  userLongitude: PropTypes.number,
 };
 
 export default List;

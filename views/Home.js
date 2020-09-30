@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +8,8 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 
 const Home = () => {
+  const [userLatitude, setUserLatitude] = useState(0);
+  const [userLongitude, setUserLongitude] = useState(0);
   const getLocation = async () => {
     try {
       // permission to get user location
@@ -15,8 +17,8 @@ const Home = () => {
       if (status === 'granted') {
         // get location
         const userLocation = await Location.getCurrentPositionAsync();
-        console.log('location of user');
-        console.log(userLocation);
+        setUserLatitude(userLocation.coords.latitude);
+        setUserLongitude(userLocation.coords.longitude);
       } else {
         console.log('Permission denied');
       }
@@ -24,13 +26,13 @@ const Home = () => {
       console.log(e.message);
     }
   };
-  useEffect(() => {
-    getLocation();
-  }, []);
+  getLocation();
 
+  console.log('latitude in home: ', userLatitude);
+  console.log('longitude in home: ', userLongitude);
   return (
     <SafeAreaView style={styles.container}>
-      <List />
+      <List userLatitude={userLatitude} userLongitude={userLongitude} />
     </SafeAreaView>
   );
 };
