@@ -15,6 +15,7 @@ import useUploadForm from '../hooks/UploadServices';
 import FormTxtInput from '../components/FormTxtInput';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import {upload, appIdentifier, setTag} from '../hooks/APIservices';
 
@@ -24,8 +25,16 @@ const NewItem = ({navigation}) => {
 
   const uploadMedia = async () => {
     const uploadData = new FormData();
+    const userLocation = await getLocation();
+
+    const descData = {
+      description: inputs.description,
+      latitude: userLocation.coords.latitude,
+      longitude: userLocation.coords.longitude,
+    };
+
     uploadData.append('title', inputs.title);
-    uploadData.append('description', inputs.description);
+    uploadData.append('description', JSON.stringify(descData));
 
     const filename = image.split('/').pop();
     const match = /\.(\w+)$/.exec(filename);
@@ -49,6 +58,24 @@ const NewItem = ({navigation}) => {
       resetInputs();
       navigation.replace('Home');
     }, 1500);
+  };
+
+  const getLocation = async () => {
+    try {
+      // permission to get user location
+      const {status} = await Permissions.askAsync(Permissions.LOCATION);
+      if (status === 'granted') {
+        // get location
+        const userLocation = await Location.getCurrentPositionAsync();
+        console.log('location of user');
+        console.log(userLocation);
+        return userLocation;
+      } else {
+        console.log('Permission denied');
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
 
