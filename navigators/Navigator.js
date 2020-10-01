@@ -26,7 +26,7 @@ const TabScreen = () => {
 const StackScreen = () => {
   const {isLoggedIn} = useContext(AuthContext);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       {isLoggedIn ? (
         <>
           <Stack.Screen name="Home" component={TabScreen} />
@@ -49,5 +49,6 @@ const Navigator = () => {
     </NavigationContainer>
   );
 };
+
 
 export default Navigator;
