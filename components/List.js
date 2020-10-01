@@ -9,7 +9,15 @@ import {AuthContext} from '../contexts/AuthContext';
 
 const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
   const {user} = useContext(AuthContext);
+  // fetching media data
   const mediaArray = useLoadMedia(all, user.user_id);
+
+  // sorting mediaarray (newest item first)
+  mediaArray.sort(function(a, b) {
+    return a.file_id - b.file_id;
+  });
+  mediaArray.reverse();
+  console.log(mediaArray);
 
   return (
     <FlatList
@@ -27,7 +35,7 @@ List.propTypes = {
   userLatitude: PropTypes.number,
   userLongitude: PropTypes.number,
   distanceBool: PropTypes.bool,
-  all: PropTypes.all,
+  all: PropTypes.bool,
 };
 
 export default List;

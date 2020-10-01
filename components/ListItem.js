@@ -40,55 +40,55 @@ const degreesToRadius = (deg) => {
 const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
   let distance = 0.0;
   if (distanceBool) {
-    console.log('listitem coords: ', userLatitude, ', ', userLongitude);
-    console.log({singleMedia});
     const descData = JSON.parse(singleMedia.description);
-    console.log('coordinates of item: ', descData.latitude, ', ', descData.longitude);
     distance = calculateDistance(userLatitude, userLongitude, descData.latitude, descData.longitude);
-    console.log('distance: ', distance);
   }
+
   return (
     <Content>
       <Card style={styles.list}>
-        <Text style={styles.title}>
-          {distanceBool ? (
-            <CardItem>
-              <Left>
-                <Text style={styles.text}>{singleMedia.title}</Text>
-              </Left>
-            </CardItem>
-          ) : (
-              <Text>Your Post</Text>
-            )
-          }
-        </Text>
+        <CardItem>
+          <Left>
+            <Text style={styles.title}>{singleMedia.title}</Text>
+          </Left>
+        </CardItem>
         <TouchableOpacity onPress={
           () => {
             navigation.navigate('Single', {file: singleMedia});
           }}>
           <CardItem cardBody >
-            <Image source={{uri: mediaUrl + singleMedia.filename}} style={{height: 250, width: null, flex: 1}} />
+            <Image source={{uri: mediaUrl + singleMedia.thumbnails.w640}} style={{height: 250, width: null, flex: 1}} />
           </CardItem>
         </TouchableOpacity>
         <CardItem>
 
           <Body style={styles.body2}>
+
             <Button style={styles.buttons} transparent>
               <Icon style={styles.icon} active name='flame' />
             </Button>
+
             <Button style={styles.buttons} transparent>
               <Icon style={styles.icon} active name='ice-cream' />
             </Button>
+
             <Button style={styles.buttons} transparent onPress={
               () => {
                 navigation.navigate('Single', {file: singleMedia});
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
+
             <Button style={styles.locationBtn} >
               <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-              <Text>{Math.round(distance)}km</Text>
+              {distance > 0.1 ? (
+                <Text>{Math.round(distance)}km</Text>
+              ) : (
+                  <Text>here</Text>
+                )
+              }
             </Button>
+
           </Body>
         </CardItem>
       </Card>
@@ -97,10 +97,10 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 20,
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-
   body2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -111,10 +111,7 @@ const styles = StyleSheet.create({
   },
 
   list: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 10,
-    marginBottom: 0,
+    marginBottom: 5,
   },
 
 });

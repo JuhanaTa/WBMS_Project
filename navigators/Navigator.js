@@ -19,8 +19,7 @@ const Stack = createStackNavigator();
 const TabScreen = () => {
   return (
     <Tab.Navigator
-      style={{backgroundColor: '#A9A4A4'}}>
-
+      barStyle={{backgroundColor: '#FF6536'}}>
       <Tab.Screen name="Home"
         options={{
           tabBarLabel: 'Home',
@@ -56,12 +55,27 @@ const StackScreen = () => {
     <Stack.Navigator >
       {isLoggedIn ? (
         <>
-          <Stack.Screen name="Home" component={TabScreen} />
-          <Stack.Screen name="Single" component={Single} />
+          <Stack.Screen name="Home" component={TabScreen}
+            options={{
+              title: 'Home', headerStyle: {
+                backgroundColor: '#FF6536',
+              },
+            }} />
+          <Stack.Screen name="Single" component={Single}
+            options={{
+              title: 'Single', headerStyle: {
+                backgroundColor: '#FF6536',
+              },
+            }} />
         </>
       ) : (
           <>
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Login" component={Login}
+              options={{
+                title: 'Login', headerStyle: {
+                  backgroundColor: '#FF6536',
+                },
+              }} />
           </>
         )}
     </Stack.Navigator>

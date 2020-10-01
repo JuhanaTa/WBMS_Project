@@ -39,8 +39,7 @@ const App = () => {
   }
 
   StatusBar.setBarStyle('light-content', true);
-  StatusBar.setBackgroundColor('#FF421D');
-
+  StatusBar.setBackgroundColor('#FF6536');
   return (
     <>
       <AuthProvider>
