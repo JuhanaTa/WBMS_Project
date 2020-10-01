@@ -5,6 +5,10 @@ import Navigator from './navigators/Navigator';
 import * as Expo from 'expo';
 import * as Font from 'expo-font';
 
+import * as Permissions from 'expo-permissions';
+import {StatusBar} from 'react-native';
+
+
 const App = () => {
   const [fontReady, setFontReady] = useState(false);
   const loadFonts = async () => {
@@ -14,8 +18,17 @@ const App = () => {
     });
     setFontReady(true);
   };
+
+  const askLocationPermission = async () => {
+    const {status} = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      alert('Permission needed in order you to make any uploads');
+    }
+  };
+
   useEffect(() => {
     loadFonts();
+    askLocationPermission();
   }, []);
 
   if (!fontReady) {
@@ -25,12 +38,17 @@ const App = () => {
     );
   }
 
-  return (
-    <AuthProvider>
-      <Navigator />
-    </AuthProvider>
+  StatusBar.setBarStyle('light-content', true);
+  StatusBar.setBackgroundColor('#FF421D');
 
+  return (
+    <>
+      <AuthProvider>
+        <Navigator />
+      </AuthProvider>
+    </>
   );
 };
+
 
 export default App;

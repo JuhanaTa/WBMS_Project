@@ -18,6 +18,7 @@ import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import {upload, appIdentifier, setTag} from '../hooks/APIservices';
+import {Video} from 'expo-av';
 
 const NewItem = ({navigation}) => {
   const [image, setImage] = useState(null);
@@ -87,6 +88,7 @@ const NewItem = ({navigation}) => {
 
   const resetInputs = () => {
     reset();
+    setImage(null);
   };
 
   const pickImage = async () => {
@@ -108,6 +110,23 @@ const NewItem = ({navigation}) => {
     }
   };
 
+  const launchCamera = async () => {
+    const options = {
+      storageOptions: {
+        allowsEditing: true,
+        skipBackup: true,
+        path: 'images',
+        quality: 1,
+      },
+    };
+    const result = await ImagePicker.launchCameraAsync(options);
+    if (!result.cancelled) {
+      setImage(result.uri);
+      setFileType(result.type);
+    }
+    console.log(result);
+  };
+
   const getPermissionAsync = async () => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -123,10 +142,20 @@ const NewItem = ({navigation}) => {
   return (
     <Container>
       <Content padder>
-        <Image
-          source={{uri: image}}
-          style={{height: 400, width: null, flex: 1}}
-        />
+        <>
+          {fileType === 'image' ?
+              <Image
+                source={{uri: image}}
+                style={{height: 400, width: null, flex: 1}}
+              /> :
+              <Video
+                source={{uri: image}}
+                style={{height: 400, width: null, flex: 1}}
+                useNativeControls={true}
+                resizeMode="cover"
+              />
+          }
+        </>
         <Form>
           <FormTxtInput
             autoCapitalize="none"
@@ -146,6 +175,10 @@ const NewItem = ({navigation}) => {
         <Button block
           onPress={pickImage}>
           <Text>Pick Media file</Text>
+        </Button>
+        <Button block
+          onPress={launchCamera}>
+          <Text>Take Photo</Text>
         </Button>
         <Button block
           onPress={uploadMedia}>

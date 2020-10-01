@@ -2,15 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {
   Content,
   Card,
   CardItem,
   Text,
   Button,
   Icon,
-  Left,
   Body,
-  Right,
+  Left,
 } from 'native-base';
 import {Image} from 'react-native';
 
@@ -46,48 +49,75 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
   }
   return (
     <Content>
-      <Card>
-        <CardItem>
-        </CardItem>
-        <CardItem cardBody>
-          <Image source={{uri: mediaUrl + singleMedia.filename}} style={{height: 250, width: null, flex: 1}} />
-        </CardItem>
-        <CardItem>
+      <Card style={styles.list}>
+        <Text style={styles.title}>
           {distanceBool ? (
-            <Left>
-              <Text>{singleMedia.title} Distance: {distance}</Text>
-            </Left>
-          ) : (
+            <CardItem>
               <Left>
-                <Text>Your Post</Text>
+                <Text style={styles.text}>{singleMedia.title}</Text>
               </Left>
+            </CardItem>
+          ) : (
+              <Text>Your Post</Text>
             )
           }
-          <Body>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon style={{fontSize: 38}} active name='flame' />
+        </Text>
+        <TouchableOpacity onPress={
+          () => {
+            navigation.navigate('Single', {file: singleMedia});
+          }}>
+          <CardItem cardBody >
+            <Image source={{uri: mediaUrl + singleMedia.filename}} style={{height: 250, width: null, flex: 1}} />
+          </CardItem>
+        </TouchableOpacity>
+        <CardItem>
+
+          <Body style={styles.body2}>
+            <Button style={styles.buttons} transparent>
+              <Icon style={styles.icon} active name='flame' />
             </Button>
-          </Right>
-          <Right>
-            <Button transparent>
-              <Icon style={{fontSize: 38}} active name='ice-cream' />
+            <Button style={styles.buttons} transparent>
+              <Icon style={styles.icon} active name='ice-cream' />
             </Button>
-          </Right>
-          <Right>
-            <Button transparent onPress={
+            <Button style={styles.buttons} transparent onPress={
               () => {
-                navigation.navigate('Single');
+                navigation.navigate('Single', {file: singleMedia});
               }}>
-              <Icon name={'eye'}></Icon>
+              <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
-          </Right>
+            <Button style={styles.locationBtn} >
+              <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
+              <Text>{Math.round(distance)}km</Text>
+            </Button>
+          </Body>
         </CardItem>
       </Card>
     </Content >
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 20,
+  },
+
+  body2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  icon: {
+    color: '#FF421D',
+    fontSize: 30,
+  },
+
+  list: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    marginBottom: 0,
+  },
+
+});
 
 
 ListItem.propTypes = {
