@@ -126,6 +126,21 @@ const setTag = async (tag, token) => {
   }
 };
 
+const getAvatar = async (id) => {
+  try {
+    const response = await fetch(apiUrl+ 'tags/avatar_' + id);
+
+    const avatarImages = await response.json();
+    if (response.ok) {
+      return avatarImages;
+    } else {
+      throw new Error(avatarImages.message);
+    }
+  } catch (e) {
+    throw new Error('get avatar error', e.message);
+  }
+};
+
 export {
   useLogin,
   tokenCheck,
@@ -133,5 +148,6 @@ export {
   useLoadMedia,
   upload,
   setTag,
+  getAvatar,
   appIdentifier,
 };
