@@ -40,7 +40,7 @@ const Profile = (props) => {
         </Body>
       </ListItem>
 
-      <List></List>
+      <List distanceBool={false} navigation={props.navigation}></List>
 
     </SafeAreaView>
   );
