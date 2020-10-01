@@ -54,6 +54,12 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude}) => {
             <Text>{singleMedia.title} Distance: {distance}</Text>
           </Left>
           <Body>
+            <Button transparent onPress={
+              () => {
+                navigation.navigate('Single', {file: singleMedia});
+              }}>
+              <Icon name={'eye'}></Icon>
+            </Button>
           </Body>
           <Right>
             <Button transparent>
@@ -64,6 +70,8 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude}) => {
             <Button transparent>
               <Icon style={{fontSize: 38}} active name='ice-cream' />
             </Button>
+          </Right>
+          <Right>
           </Right>
         </CardItem>
       </Card>
