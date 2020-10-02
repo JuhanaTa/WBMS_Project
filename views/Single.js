@@ -21,6 +21,7 @@ Ulkoasu vaatii työtä
 
 const Single = ({route}) => {
   const {file} = route.params;
+  console.log('inside single');
   console.log(file);
   const [videoRef, setVideoRef] = useState(null);
 
@@ -60,7 +61,7 @@ const Single = ({route}) => {
     };
   }, [videoRef]);
 
-  console.log('kuva', mediaUrl + file.filename);
+  console.log('kuva', mediaUrl + file.file.filename);
   return (
     <Container>
       <Content padder>
@@ -68,33 +69,34 @@ const Single = ({route}) => {
           <CardItem>
             <Left>
               <Icon name={'image'} />
-              <Text>{file.title}</Text>
+              <Text>{file.file.title}</Text>
             </Left>
           </CardItem>
           <CardItem cardBody>
             <>
-              {file.media_type === 'image' ?
+              {file.file.media_type === 'image' ?
                 <Image
-                  source={{uri: mediaUrl + file.filename}}
+                  source={{uri: mediaUrl + file.file.filename}}
                   style={{height: 400, width: null, flex: 1}}
                 /> :
                 <Video
                   ref={handleVideoRef}
                   source={{
                     uri:
-                        mediaUrl + file.filename,
+                        mediaUrl + file.file.filename,
                   }}
                   style={{height: 400, width: null, flex: 1}}
                   useNativeControls={true}
                   resizeMode="cover"
-                  posterSource={{uri: mediaUrl + file.screenshot}}
+                  posterSource={{uri: mediaUrl + file.file.screenshot}}
                 />
               }
             </>
           </CardItem>
           <CardItem>
             <Text>
-              {file.description}
+              {file.file.description}
+              {file.distance}
             </Text>
           </CardItem>
         </Card>
