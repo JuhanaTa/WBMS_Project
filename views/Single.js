@@ -1,16 +1,14 @@
 /* eslint-disable max-len */
 import React, {useState, useEffect} from 'react';
-import {Image} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {
   Card,
   CardItem,
   Left,
-  Icon,
   Text,
   Content,
   Container,
-  Button,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -69,7 +67,7 @@ const Single = ({route}) => {
         <Card>
           <CardItem>
             <Left>
-              <Text>{file.title}</Text>
+              <Text style={styles.title}>{file.title}</Text>
             </Left>
           </CardItem>
           <CardItem cardBody>
@@ -106,6 +104,12 @@ const Single = ({route}) => {
   );
 };
 
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 Single.propTypes = {
   route: PropTypes.object,

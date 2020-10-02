@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
   TouchableOpacity,
@@ -16,32 +16,37 @@ import {
   Left,
 } from 'native-base';
 import {Image} from 'react-native';
+import {addLike, getLikes} from '../hooks/APIservices';
+import AsyncStorage from '@react-native-community/async-storage';
+import {calculateDistance} from '../hooks/distanceService';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  const R = 6371; // Radius of the earth in km
-  const dLat = degreesToRadius(lat2 - lat1); // deg2rad below
-  const dLon = degreesToRadius(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(degreesToRadius(lat1)) * Math.cos(degreesToRadius(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const d = R * c; // Distance in km
-  return d;
-};
-
-const degreesToRadius = (deg) => {
-  return deg * (Math.PI / 180);
-};
-
 const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
+  const [likes, setLikes] = useState(0);
+  useEffect(() => {
+    updateLikes();
+  }, []);
   let distance = 0.0;
   if (distanceBool) {
     const descData = JSON.parse(singleMedia.description);
     distance = calculateDistance(userLatitude, userLongitude, descData.latitude, descData.longitude);
+    console.log('distance: ', distance);
   }
+
+  const likeAddition = async () => {
+    const userToken = await AsyncStorage.getItem('UToken');
+    const likeResponse = await addLike({
+      file_id: singleMedia.file_id,
+    }, userToken);
+    console.log(likeResponse);
+    await updateLikes();
+  };
+
+  const updateLikes = async () => {
+    const likesList = await getLikes(singleMedia.file_id);
+    console.log(likesList);
+  };
 
   return (
     <Content>
@@ -63,7 +68,9 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
           <Body style={styles.body2}>
 
-            <Button style={styles.buttons} transparent>
+            <Button style={styles.buttons} transparent
+              onPress={likeAddition}>
+              <Text></Text>
               <Icon style={styles.icon} active name='flame' />
             </Button>
 
@@ -108,7 +115,10 @@ const styles = StyleSheet.create({
     color: '#FF421D',
     fontSize: 30,
   },
-
+  like: {
+    color: '#FF421D',
+    fontSize: 30,
+  },
   list: {
     marginBottom: 5,
   },
