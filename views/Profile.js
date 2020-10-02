@@ -54,7 +54,7 @@ const Profile = (props) => {
         <Body style={styles.profileBody}>
           <Text style={{fontSize: 16}}>Name: Tester</Text>
           <Text style={{fontSize: 16}}>Points: 9000</Text>
-          <Button style={styles.btn} title={'change picture'}/>
+          <Button style={styles.btn} title={'change picture'} />
           <Button style={styles.btn} title={'Log out'} onPress={signOut}
           />
         </Body>

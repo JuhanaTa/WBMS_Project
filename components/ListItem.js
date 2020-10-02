@@ -75,7 +75,7 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
           <Body style={styles.body2}>
 
-            <Button style={styles.buttons}
+            <Button style={styles.buttons} transparent
               onPress={likeAddition}>
               <Text>{likes}</Text>
               <Icon style={styles.icon} active name='flame' />
@@ -91,17 +91,17 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
                   file: singleMedia,
                   distance: distance,
                 };
-                navigation.navigate('Single', {file: data} );
+                navigation.navigate('Single', {file: data});
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
 
-            <Button style={styles.locationBtn} >
+            <Button style={styles.locationBtn} transparent>
               <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
               {distance > 0.1 ? (
-                <Text>{Math.round(distance)}km</Text>
+                <Text style={styles.Text}>{Math.round(distance)}km</Text>
               ) : (
-                  <Text>here</Text>
+                  <Text style={styles.Text}>here</Text>
                 )
               }
             </Button>
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: 'black',
   },
   body2: {
     flexDirection: 'row',
@@ -132,6 +133,9 @@ const styles = StyleSheet.create({
   },
   list: {
     marginBottom: 5,
+  },
+  Text: {
+    color: 'black',
   },
 
 });

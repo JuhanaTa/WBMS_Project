@@ -30,7 +30,7 @@ const Home = (props) => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getLocation();
   }, []);
 
@@ -39,11 +39,11 @@ const Home = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       {userLatitude !== 0 &&
-      <List navigation={navigation}
-        userLatitude={userLatitude}
-        userLongitude={userLongitude}
-        distanceBool={true}
-        all={true}/>
+        <List navigation={navigation}
+          userLatitude={userLatitude}
+          userLongitude={userLongitude}
+          distanceBool={true}
+          all={true} />
       }
     </SafeAreaView>
   );

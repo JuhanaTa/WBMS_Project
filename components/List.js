@@ -13,7 +13,7 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
   const mediaArray = useLoadMedia(all, user.user_id);
 
   // sorting mediaarray (newest item first)
-  mediaArray.sort(function(a, b) {
+  mediaArray.sort(function (a, b) {
     return a.file_id - b.file_id;
   });
   mediaArray.reverse();
@@ -24,7 +24,7 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
       data={mediaArray}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) =>
-        <ListItem singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} distanceBool={distanceBool}/>
+        <ListItem singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} distanceBool={distanceBool} />
       }
     />
   );

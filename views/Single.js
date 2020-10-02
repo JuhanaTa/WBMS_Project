@@ -1,17 +1,19 @@
+/* eslint-disable max-len */
 import React, {useState, useEffect} from 'react';
-import {Image} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {
   Card,
   CardItem,
   Left,
-  Icon,
   Text,
   Content,
   Container,
+  Icon,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import {getComments} from '../hooks/APIservices';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -41,14 +43,13 @@ const Single = ({route}) => {
   };
 
   const lock = async () => {
-    await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP,
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP,
     );
   };
 
   useEffect(() => {
     unlock();
-    const orientSub = ScreenOrientation.addOrientationChangeListener((evt)=>{
+    const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation: ', evt);
       if (evt.orientationInfo.orientation > 2) {
         showVideoInFullScreen();
@@ -60,7 +61,17 @@ const Single = ({route}) => {
     };
   }, [videoRef]);
 
+
+  const updateComments = async () => {
+    const commentList = await getComments(file.file.file_id);
+    console.log('COMMENTIT', commentList);
+  };
+  updateComments();
+
+
+  const descData = JSON.parse(file.file.description);
   console.log('kuva', mediaUrl + file.file.filename);
+  // console.log(file.distance);
   return (
     <Container>
       <Content padder>
@@ -68,7 +79,7 @@ const Single = ({route}) => {
           <CardItem>
             <Left>
               <Icon name={'image'} />
-              <Text>{file.file.title}</Text>
+              <Text style={styles.title}>{file.file.title}</Text>
             </Left>
           </CardItem>
           <CardItem cardBody>
@@ -76,13 +87,13 @@ const Single = ({route}) => {
               {file.file.media_type === 'image' ?
                 <Image
                   source={{uri: mediaUrl + file.file.filename}}
-                  style={{height: 400, width: null, flex: 1}}
+                  style={{height: 350, width: null, flex: 1, resizeMode: 'contain'}}
                 /> :
-                <Video
+                < Video
                   ref={handleVideoRef}
                   source={{
                     uri:
-                        mediaUrl + file.file.filename,
+                      mediaUrl + file.file.filename,
                   }}
                   style={{height: 400, width: null, flex: 1}}
                   useNativeControls={true}
@@ -93,9 +104,17 @@ const Single = ({route}) => {
             </>
           </CardItem>
           <CardItem>
+            <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
+            {file.distance > 0.1 ? (
+              <Text>{Math.round(file.distance)}km</Text>
+            ) : (
+                <Text>here</Text>
+              )
+            }
+          </CardItem>
+          <CardItem>
             <Text>
-              {file.file.description}
-              {file.distance}
+              {descData.description}
             </Text>
           </CardItem>
         </Card>
@@ -104,6 +123,16 @@ const Single = ({route}) => {
   );
 };
 
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  icon: {
+    color: '#FF421D',
+    fontSize: 30,
+  },
+});
 
 Single.propTypes = {
   route: PropTypes.object,
