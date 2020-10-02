@@ -53,6 +53,7 @@ const useLogin = async (user) => {
 };
 
 const useRegistration = async (newUser) => {
+  delete newUser.confirmPassword;
   console.log(newUser);
   const options = {
     method: 'POST',
@@ -161,6 +162,26 @@ const addLike = async (id, token) => {
   }
 };
 
+/* const deleteLike = async (id, token) => {
+  console.log('id: ', id);
+  console.log('token: ', token);
+  const options = {
+    method: 'DELETE',
+    headers: {'x-access-token': token},
+  };
+  try {
+    const response = await fetch(apiUrl+'favourites/file/' + id, options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}; */
+
 const getLikes = async (id) => {
   try {
     const response = await fetch(apiUrl + 'favourites/file/' + id);
@@ -225,4 +246,5 @@ export {
   getComments,
   appIdentifier,
   checkUsername,
+  // deleteLike,
 };

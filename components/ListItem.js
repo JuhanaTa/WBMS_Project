@@ -14,6 +14,7 @@ import {
   Icon,
   Body,
   Left,
+  Right,
 } from 'native-base';
 import {Image} from 'react-native';
 import {addLike, getLikes} from '../hooks/APIservices';
@@ -45,6 +46,14 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
     await updateLikes();
   };
 
+  /* const likeDeletion = async () => {
+    const userToken = await AsyncStorage.getItem('UToken');
+    const dislikeResponse = await deleteLike(singleMedia.file_id, userToken);
+    console.log(dislikeResponse);
+    await updateLikes();
+  };
+  */
+
   const updateLikes = async () => {
     const likesList = await getLikes(singleMedia.file_id);
     console.log(likesList.length);
@@ -58,6 +67,9 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
           <Left>
             <Text style={styles.title}>{singleMedia.title}</Text>
           </Left>
+          <Right>
+            <Text>{singleMedia.time_added}</Text>
+          </Right>
         </CardItem>
         <TouchableOpacity onPress={
           () => {
@@ -75,17 +87,13 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
           <Body style={styles.body2}>
 
-            <Button style={styles.buttons} transparent
+            <Button style={styles.buttons}
               onPress={likeAddition}>
               <Text>{likes}</Text>
-              <Icon style={styles.icon} active name='flame' />
+              <Icon style={styles.icon} active name='thumbs-up' />
             </Button>
 
-            <Button style={styles.buttons} transparent>
-              <Icon style={styles.icon} active name='ice-cream' />
-            </Button>
-
-            <Button style={styles.buttons} transparent onPress={
+            <Button style={styles.buttons} onPress={
               () => {
                 const data = {
                   file: singleMedia,
@@ -96,7 +104,7 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
 
-            <Button style={styles.locationBtn} transparent>
+            <Button style={styles.locationBtn} >
               <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
               {distance > 0.1 ? (
                 <Text style={styles.Text}>{Math.round(distance)}km</Text>
@@ -135,7 +143,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   Text: {
-    color: 'black',
   },
 
 });

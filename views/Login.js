@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {tokenCheck} from '../hooks/APIservices';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Container, Content, Button, Text, View} from 'native-base';
+import {Container, Content, Button, Text, View}
+  from 'native-base';
 
 const Login = (props) => { // props is needed for navigation
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(AuthContext);
@@ -39,13 +40,14 @@ const Login = (props) => { // props is needed for navigation
           <RegisterForm navigation={props.navigation} />
         }
         <View style={{alignItems: 'center'}}>
-          <Text> {showReg ? 'No account yet?' : ''}</Text>
+          <Text>{showReg ? 'No account yet?':'Already have an account?'}</Text>
         </View>
         <Button block onPress={() => {
           setShowReg(!showReg);
         }}>
           <Text> {showReg ? 'Register' : 'Login'}</Text>
         </Button>
+
       </Content>
     </Container>
   );
