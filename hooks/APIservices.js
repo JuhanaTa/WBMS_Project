@@ -149,7 +149,7 @@ const addLike = async (id, token) => {
   };
   try {
     console.log(id);
-    const response = await fetch(apiUrl+ 'favourites', options);
+    const response = await fetch(apiUrl + 'favourites', options);
     const result = await response.json();
     if (response.ok) {
       return result;
@@ -163,7 +163,7 @@ const addLike = async (id, token) => {
 
 const getLikes = async (id) => {
   try {
-    const response = await fetch(apiUrl+ 'favourites/file/' + id);
+    const response = await fetch(apiUrl + 'favourites/file/' + id);
 
     const likesList = await response.json();
     if (response.ok) {
@@ -175,6 +175,23 @@ const getLikes = async (id) => {
     throw new Error('get likes error', e.message);
   }
 };
+
+const getComments = async (id) => {
+  try {
+    const response = await fetch(apiUrl + 'comments/file/' + id);
+
+    const commentList = await response.json();
+    if (response.ok) {
+      return commentList;
+    } else {
+      throw new Error(commentList.message);
+    }
+  } catch (e) {
+    throw new Error('get comment error', e.message);
+  }
+};
+
+
 export {
   useLogin,
   tokenCheck,
@@ -185,5 +202,6 @@ export {
   getAvatar,
   addLike,
   getLikes,
+  getComments,
   appIdentifier,
 };

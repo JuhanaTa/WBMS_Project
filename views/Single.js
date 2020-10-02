@@ -9,9 +9,11 @@ import {
   Text,
   Content,
   Container,
+  Icon,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import {getComments} from '../hooks/APIservices';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -21,6 +23,7 @@ Ulkoasu vaatii työtä
 
 const Single = ({route}) => {
   const {file} = route.params;
+  console.log('inside single');
   console.log(file);
   const [videoRef, setVideoRef] = useState(null);
 
@@ -59,39 +62,56 @@ const Single = ({route}) => {
     };
   }, [videoRef]);
 
-  const descData = JSON.parse(file.description);
-  console.log('kuva', mediaUrl + file.filename);
+
+  const updateComments = async () => {
+    const commentList = await getComments(file.file.file_id);
+    console.log('COMMENTIT', commentList);
+  };
+  updateComments();
+
+
+  const descData = JSON.parse(file.file.description);
+  console.log('kuva', mediaUrl + file.file.filename);
+  // console.log(file.distance);
   return (
     <Container>
       <Content padder>
         <Card>
           <CardItem>
             <Left>
-              <Text style={styles.title}>{file.title}</Text>
+              <Icon name={'image'} />
+              <Text style={styles.title}>{file.file.title}</Text>
             </Left>
           </CardItem>
           <CardItem cardBody>
             <>
-              {file.media_type === 'image' ?
+              {file.file.media_type === 'image' ?
                 <Image
-                  source={{uri: mediaUrl + file.filename}}
-                  style={{
-                    resizeMode: 'contain', height: 350, width: null, flex: 1,
-                  }}
+                  source={{uri: mediaUrl + file.file.filename}}
+                  style={{height: 350, width: null, flex: 1, resizeMode: 'contain'}}
                 /> :
                 < Video
                   ref={handleVideoRef}
                   source={{
                     uri:
-                      mediaUrl + file.filename,
+                      mediaUrl + file.file.filename,
                   }}
                   style={{height: 400, width: null, flex: 1}}
                   useNativeControls={true}
                   resizeMode="cover"
-                  posterSource={{uri: mediaUrl + file.screenshot}}
+                  posterSource={{uri: mediaUrl + file.file.screenshot}}
                 />
               }
             </>
+          </CardItem>
+          <CardItem>
+            <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
+            {file.distance > 0.1 ? (
+              <Text>{Math.round(file.distance)}km</Text>
+            ) : (
+                <Text>here</Text>
+              )
+            }
           </CardItem>
           <CardItem>
             <Text>
@@ -108,6 +128,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  icon: {
+    color: '#FF421D',
+    fontSize: 30,
   },
 });
 

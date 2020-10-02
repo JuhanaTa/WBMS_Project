@@ -56,7 +56,7 @@ const RegisterForm = ({navigation}) => {
         placeholder="full name"
         onChangeText={(txt) => handleInputChange('full_name', txt)}
       />
-      <Button title="Login!" onPress={doRegister}/>
+      <Button title="Login!" onPress={doRegister} />
     </View>
   );
 };
