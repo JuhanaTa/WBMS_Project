@@ -24,9 +24,11 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
   const [likes, setLikes] = useState(0);
+
   useEffect(() => {
     updateLikes();
   }, []);
+
   let distance = 0.0;
   if (distanceBool) {
     const descData = JSON.parse(singleMedia.description);
@@ -58,7 +60,11 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
         </CardItem>
         <TouchableOpacity onPress={
           () => {
-            navigation.navigate('Single', {file: singleMedia});
+            const data = {
+              file: singleMedia,
+              distance: distance,
+            };
+            navigation.navigate('Single', {file: data});
           }}>
           <CardItem cardBody >
             <Image source={{uri: mediaUrl + singleMedia.thumbnails.w640}} style={{height: 250, width: null, flex: 1}} />
@@ -80,7 +86,11 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
             <Button style={styles.buttons} transparent onPress={
               () => {
-                navigation.navigate('Single', {file: singleMedia});
+                const data = {
+                  file: singleMedia,
+                  distance: distance,
+                };
+                navigation.navigate('Single', {file: data} );
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
