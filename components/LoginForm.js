@@ -1,11 +1,12 @@
 import React, {useContext} from 'react';
-import {View, Button} from 'react-native';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useLogin} from '../hooks/APIservices';
 import FormTextInput from './FormTxtInput';
 import useLoginForm from '../hooks/LoginServices';
+import {Button, Text} from 'native-base';
 
 const LoginForm = ({navigation}) => {
   // setUser,
@@ -13,10 +14,15 @@ const LoginForm = ({navigation}) => {
   const {
     handleInputChange,
     inputs,
+    loginErrors,
+    validateOnSend,
   } = useLoginForm();
 
   const doLogin = async () => {
-    console.log(inputs);
+    if (!validateOnSend()) {
+      console.log('validate on send failed');
+      return;
+    }
     try {
       const userData = await useLogin(inputs);
       setUser(userData.user);
@@ -35,15 +41,17 @@ const LoginForm = ({navigation}) => {
         autoCapitalize="none"
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
+        error={loginErrors.username}
       />
       <FormTextInput
         autoCapitalize="none"
         placeholder="password"
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
+        error={loginErrors.password}
       />
 
-      <Button title="Login!" onPress={doLogin} />
+      <Button block onPress={doLogin}><Text>login</Text></Button>
     </View>
   );
 };

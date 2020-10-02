@@ -1,15 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Button,
-} from 'react-native';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import {tokenCheck} from '../hooks/APIservices';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Container, Content, Button, Text, View} from 'native-base';
 
 const Login = (props) => { // props is needed for navigation
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(AuthContext);
@@ -36,26 +32,24 @@ const Login = (props) => { // props is needed for navigation
   }, []);
 
   return (
-    <View style={styles.container}>
-      {showReg ?
-        <LoginForm navigation={props.navigation} /> :
-        <RegisterForm navigation={props.navigation} />
-      }
-      <Button title={showReg ? 'Register' : 'Login'} onPress={() => {
-        setShowReg(!showReg);
-      }}>
-      </Button>
-    </View>
+    <Container >
+      <Content padder>
+        {showReg ?
+          <LoginForm navigation={props.navigation} /> :
+          <RegisterForm navigation={props.navigation} />
+        }
+        <View style={{alignItems: 'center'}}>
+          <Text> {showReg ? 'No account yet?' : ''}</Text>
+        </View>
+        <Button block onPress={() => {
+          setShowReg(!showReg);
+        }}>
+          <Text> {showReg ? 'Register' : 'Login'}</Text>
+        </Button>
+      </Content>
+    </Container>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 Login.propTypes = {
   navigation: PropTypes.object,

@@ -20,11 +20,12 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Profile = (props) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(AuthContext);
-  const [avatar, setAvatar] = useState([{filename: ''}]);
+  const [avatar, setAvatar] = useState([]);
   console.log('inside Profile, currently: ' + isLoggedIn);
   const fetchAvatar = async () => {
     try {
       const result = await getAvatar(user.user_id);
+      console.log('result: ', result);
       setAvatar(result);
     } catch (e) {
       console.log(e.message);
@@ -48,7 +49,7 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ListItem itemDivider >
-        <Image source={{uri: 'http://placekitten.com/200/300'}}
+        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar[0].filename : 'http://placekitten.com/200/300'}}
           style={styles.profileImage} />
         <Body style={styles.profileBody}>
           <Text style={{fontSize: 16}}>Name: Tester</Text>

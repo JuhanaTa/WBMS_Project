@@ -22,7 +22,6 @@ Ulkoasu vaatii työtä
 const Single = ({route}) => {
   const {file} = route.params;
   console.log('inside single');
-  console.log(file);
   const [videoRef, setVideoRef] = useState(null);
 
   const handleVideoRef = (component) => {
