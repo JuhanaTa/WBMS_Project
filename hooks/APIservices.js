@@ -194,7 +194,7 @@ const getComments = async (id) => {
 
 const checkUsername = async (username) => {
   try {
-    const response = await fetch(apiUrl+ 'users/username/' +username);
+    const response = await fetch(apiUrl + 'users/username/' + username);
 
     const result = await response.json();
     if (response.ok) {
