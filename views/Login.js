@@ -12,7 +12,7 @@ import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 
 const Login = (props) => { // props is needed for navigation
-  const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
+  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(AuthContext);
   const [showReg, setShowReg] = useState(true);
 
 
@@ -25,6 +25,7 @@ const Login = (props) => { // props is needed for navigation
         const userData = await tokenCheck(userToken);
         console.log('token valid', userData);
         setIsLoggedIn(true);
+        setUser(userData);
       } catch (e) {
         console.log(e.message);
       }

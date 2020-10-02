@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
   SafeAreaView,
@@ -14,10 +14,27 @@ import {
   ListItem,
 } from 'native-base';
 import List from '../components/List';
+import {getAvatar} from '../hooks/APIservices';
+
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Profile = (props) => {
-  const {isLoggedIn, setIsLoggedIn} = useContext(AuthContext);
+  const {isLoggedIn, setIsLoggedIn, user} = useContext(AuthContext);
+  const [avatar, setAvatar] = useState([{filename: ''}]);
   console.log('inside Profile, currently: ' + isLoggedIn);
+  const fetchAvatar = async () => {
+    try {
+      const result = await getAvatar(user.user_id);
+      setAvatar(result);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchAvatar();
+  }, []);
 
   const signOut = async () => {
     setIsLoggedIn(false);
@@ -27,22 +44,27 @@ const Profile = (props) => {
     }
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
-      <Button title={'Logout'} onPress={signOut} />
-
-      <ListItem itemDivider style={styles.profile}>
-        <Image source={{uri: 'http://placekitten.com/160/167'}}
-          style={{height: 150, width: null, flex: 1}} />
-        <Body>
-          <Text>Name: Tester</Text>
-          <Text>Points: 9000</Text>
+      <ListItem itemDivider >
+        <Image source={{uri: 'http://placekitten.com/200/300'}}
+          style={styles.profileImage} />
+        <Body style={styles.profileBody}>
+          <Text style={{fontSize: 16}}>Name: Tester</Text>
+          <Text style={{fontSize: 16}}>Points: 9000</Text>
+          <Button style={styles.btn} title={'change picture'} />
+          <Button style={styles.btn} title={'Log out'} onPress={signOut}
+          />
         </Body>
+      </ListItem>
+      <ListItem itemDivider style={styles.header} >
+        <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
       </ListItem>
 
       <List distanceBool={false} navigation={props.navigation}></List>
 
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -54,6 +76,26 @@ const styles = StyleSheet.create({
   },
   profile: {
     marginBottom: 5,
+    flexDirection: 'row',
+    flex: 1,
+  },
+  profileBody: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  profileImage: {
+    height: 150,
+    width: null,
+    flex: 1,
+  },
+  btn: {
+    marginTop: 20,
+  },
+  header: {
+    justifyContent: 'center',
+
   },
 });
 

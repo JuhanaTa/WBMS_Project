@@ -42,7 +42,8 @@ const Home = (props) => {
         <List navigation={navigation}
           userLatitude={userLatitude}
           userLongitude={userLongitude}
-          distanceBool={true} />
+          distanceBool={true}
+          all={true} />
       }
     </SafeAreaView>
   );
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
+    backgroundColor: '#A9A4A4',
   },
 });
 

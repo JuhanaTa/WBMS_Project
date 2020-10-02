@@ -4,7 +4,7 @@ import axios from 'axios';
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 const appIdentifier = 'juhkuTest2';
 
-const useLoadMedia = () => {
+const useLoadMedia = (all, userId) => {
   const [mediaArray, setMediaArray] = useState([]);
   const loadMedia = async () => {
     try {
@@ -16,10 +16,13 @@ const useLoadMedia = () => {
         const json2 = await resp2.json();
         return json2;
       }));
-      // console.log('loadMedia', media);
-      setMediaArray(media);
+      if (all) {
+        setMediaArray(media);
+      } else {
+        setMediaArray(media.filter((item) => item.user_id === userId));
+      }
     } catch (e) {
-      console.error(e);
+      console.error('media load error: ', e);
     }
   };
   useEffect(() => {
@@ -123,6 +126,21 @@ const setTag = async (tag, token) => {
   }
 };
 
+const getAvatar = async (id) => {
+  try {
+    const response = await fetch(apiUrl + 'tags/avatar_' + id);
+
+    const avatarImages = await response.json();
+    if (response.ok) {
+      return avatarImages;
+    } else {
+      throw new Error(avatarImages.message);
+    }
+  } catch (e) {
+    throw new Error('get avatar error', e.message);
+  }
+};
+
 export {
   useLogin,
   tokenCheck,
@@ -130,5 +148,6 @@ export {
   useLoadMedia,
   upload,
   setTag,
+  getAvatar,
   appIdentifier,
 };
