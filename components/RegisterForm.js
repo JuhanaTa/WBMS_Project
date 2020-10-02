@@ -1,11 +1,12 @@
 import React, {useContext} from 'react';
-import {View, Button} from 'react-native';
+import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useRegistration, useLogin} from '../hooks/APIservices';
 import FormTextInput from './FormTxtInput';
-import useLoginForm from '../hooks/LoginServices';
+import useRegisterForm from '../hooks/RegisterServices';
+import {Button, Text} from 'native-base';
 
 const RegisterForm = ({navigation}) => {
   // setUser,
@@ -13,10 +14,16 @@ const RegisterForm = ({navigation}) => {
   const {
     handleInputChange,
     inputs,
-  } = useLoginForm();
+    registerErrors,
+    validateOnSend,
+    checkUserAvailable,
+  } = useRegisterForm();
 
   const doRegister = async () => {
-    console.log(inputs);
+    if (!validateOnSend()) {
+      console.log('validate on send failed');
+      return;
+    }
     try {
       const response = await useRegistration(inputs);
       console.log('new user added');
@@ -39,24 +46,36 @@ const RegisterForm = ({navigation}) => {
         autoCapitalize="none"
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
+        onEndEditing={checkUserAvailable}
+        error={registerErrors.username}
       />
       <FormTextInput
         autoCapitalize="none"
         placeholder="password"
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
+        error={registerErrors.password}
+      />
+      <FormTextInput
+        autoCapitalize="none"
+        placeholder="confirm password"
+        onChangeText={(txt) => handleInputChange('confirmPassword', txt)}
+        secureTextEntry={true}
+        error={registerErrors.confirmPassword}
       />
       <FormTextInput
         autoCapitalize="none"
         placeholder="email"
         onChangeText={(txt) => handleInputChange('email', txt)}
+        error={registerErrors.email}
       />
       <FormTextInput
         autoCapitalize="none"
         placeholder="full name"
         onChangeText={(txt) => handleInputChange('full_name', txt)}
+        error={registerErrors.full_name}
       />
-      <Button title="Login!" onPress={doRegister} />
+      <Button block onPress={doRegister} ><Text>Register!</Text></Button>
     </View>
   );
 };
