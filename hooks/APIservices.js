@@ -175,6 +175,26 @@ const getLikes = async (id) => {
     throw new Error('get likes error', e.message);
   }
 };
+
+const checkUsername = async (username) => {
+  try {
+    const response = await fetch(apiUrl+ 'users/username/' +username);
+
+    const result = await response.json();
+    if (response.ok) {
+      if (result.available) {
+        return null;
+      } else {
+        return 'Username ' + username + ' is not available';
+      }
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 export {
   useLogin,
   tokenCheck,
@@ -186,4 +206,5 @@ export {
   addLike,
   getLikes,
   appIdentifier,
+  checkUsername,
 };
