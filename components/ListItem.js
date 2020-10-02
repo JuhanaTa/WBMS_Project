@@ -47,7 +47,8 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
   const updateLikes = async () => {
     const likesList = await getLikes(singleMedia.file_id);
-    console.log(likesList);
+    console.log(likesList.length);
+    setLikes(likesList.length);
   };
 
   return (
@@ -76,7 +77,7 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
             <Button style={styles.buttons} transparent
               onPress={likeAddition}>
-              <Text></Text>
+              <Text>{likes}</Text>
               <Icon style={styles.icon} active name='flame' />
             </Button>
 
