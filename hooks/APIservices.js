@@ -141,6 +141,40 @@ const getAvatar = async (id) => {
   }
 };
 
+const addLike = async (id, token) => {
+  const options = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'x-access-token': token},
+    body: JSON.stringify(id),
+  };
+  try {
+    console.log(id);
+    const response = await fetch(apiUrl+ 'favourites', options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
+const getLikes = async (id) => {
+  try {
+    const response = await fetch(apiUrl+ 'favourites/file/' + id);
+
+    const likesList = await response.json();
+    if (response.ok) {
+      return likesList;
+    } else {
+      throw new Error('get likes error');
+    }
+  } catch (e) {
+    throw new Error('get likes error', e.message);
+  }
+};
 export {
   useLogin,
   tokenCheck,
@@ -149,5 +183,7 @@ export {
   upload,
   setTag,
   getAvatar,
+  addLike,
+  getLikes,
   appIdentifier,
 };
