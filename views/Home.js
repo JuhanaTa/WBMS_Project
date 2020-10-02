@@ -1,16 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import List from '../components/List';
+import PropTypes from 'prop-types';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
-import PropTypes from 'prop-types';
 
 const Home = (props) => {
+  const {navigation} = props;
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
+
   const getLocation = async () => {
     try {
       // permission to get user location
@@ -27,16 +29,21 @@ const Home = (props) => {
       console.log(e.message);
     }
   };
-  getLocation();
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   console.log('latitude in home: ', userLatitude);
   console.log('longitude in home: ', userLongitude);
-  const {navigation} = props;
   return (
     <SafeAreaView style={styles.container}>
-      <List navigation={navigation}
-        userLatitude={userLatitude}
-        userLongitude={userLongitude} />
+      {userLatitude !== 0 &&
+        <List navigation={navigation}
+          userLatitude={userLatitude}
+          userLongitude={userLongitude}
+          distanceBool={true} />
+      }
     </SafeAreaView>
   );
 };

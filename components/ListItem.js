@@ -34,13 +34,16 @@ const degreesToRadius = (deg) => {
 };
 
 
-const ListItem = ({navigation, singleMedia, userLatitude, userLongitude}) => {
-  console.log('listitem coords: ', userLatitude, ', ', userLongitude);
-  console.log({singleMedia});
-  const descData = JSON.parse(singleMedia.description);
-  console.log('coordinates of item: ', descData.latitude, ', ', descData.longitude);
-  const distance = calculateDistance(userLatitude, userLongitude, descData.latitude, descData.longitude);
-  console.log('distance: ', distance);
+const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
+  let distance = 0.0;
+  if (distanceBool) {
+    console.log('listitem coords: ', userLatitude, ', ', userLongitude);
+    console.log({singleMedia});
+    const descData = JSON.parse(singleMedia.description);
+    console.log('coordinates of item: ', descData.latitude, ', ', descData.longitude);
+    distance = calculateDistance(userLatitude, userLongitude, descData.latitude, descData.longitude);
+    console.log('distance: ', distance);
+  }
   return (
     <Content>
       <Card>
@@ -50,9 +53,16 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude}) => {
           <Image source={{uri: mediaUrl + singleMedia.filename}} style={{height: 250, width: null, flex: 1}} />
         </CardItem>
         <CardItem>
-          <Left>
-            <Text>{singleMedia.title} Distance: {distance}</Text>
-          </Left>
+          {distanceBool ? (
+            <Left>
+              <Text>{singleMedia.title} Distance: {distance}</Text>
+            </Left>
+          ) : (
+              <Left>
+                <Text>Your Post</Text>
+              </Left>
+            )
+          }
           <Body>
             <Button transparent onPress={
               () => {
@@ -85,6 +95,7 @@ ListItem.propTypes = {
   navigation: PropTypes.object,
   userLatitude: PropTypes.number,
   userLongitude: PropTypes.number,
+  distanceBool: PropTypes.bool,
 };
 
 export default ListItem;
