@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {getComments} from '../hooks/APIservices';
+
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -27,10 +27,6 @@ const Single = ({route, navigation}) => {
   console.log(file);
   console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
-  const [comment, setComment] = useState([]);
-  useEffect(() => {
-    updateComments();
-  }, []);
 
   const handleVideoRef = (component) => {
     setVideoRef(component);
@@ -68,20 +64,8 @@ const Single = ({route, navigation}) => {
   }, [videoRef]);
 
 
-  const updateComments = async () => {
-    try {
-      const commentList = await getComments(file.file.file_id);
-      setComment(commentList);
-      console.log('KOMMENTIT Singlessä', commentList[0]);
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-  // console.log('ROSKAA', comment[0].comment);
-
-
   console.log('kuva', mediaUrl + file.file.filename);
-  // console.log(file.distance);
+
   return (
     <Container>
       <Content padder>
