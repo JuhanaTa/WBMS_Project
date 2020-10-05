@@ -26,7 +26,6 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
   const [likes, setLikes] = useState(0);
-  console.log('distance inside ListItem: ', singleMedia.distance);
 
   useEffect(() => {
     updateLikes();
@@ -145,6 +144,7 @@ const styles = StyleSheet.create({
   },
   list: {
     marginBottom: 5,
+    marginTop: 0,
   },
   Text: {
   },
