@@ -7,6 +7,7 @@ import * as Font from 'expo-font';
 
 import * as Permissions from 'expo-permissions';
 import {StatusBar} from 'react-native';
+import {Root} from 'native-base';
 
 
 const App = () => {
@@ -42,9 +43,11 @@ const App = () => {
   StatusBar.setBackgroundColor('#FF6536');
   return (
     <>
-      <AuthProvider>
-        <Navigator />
-      </AuthProvider>
+      <Root>
+        <AuthProvider>
+          <Navigator />
+        </AuthProvider>
+      </Root>
     </>
   );
 };

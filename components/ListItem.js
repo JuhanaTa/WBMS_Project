@@ -15,6 +15,7 @@ import {
   Body,
   Left,
   Right,
+  Toast,
 } from 'native-base';
 import {Image} from 'react-native';
 import {addLike, getLikes} from '../hooks/APIservices';
@@ -23,26 +24,31 @@ import {calculateDistance} from '../hooks/distanceService';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
+
 const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
   const [likes, setLikes] = useState(0);
+  console.log('distance inside ListItem: ', singleMedia.distance);
 
   useEffect(() => {
     updateLikes();
   }, []);
 
-  let distance = 0.0;
-  if (distanceBool) {
-    const descData = JSON.parse(singleMedia.description);
-    distance = calculateDistance(userLatitude, userLongitude, descData.latitude, descData.longitude);
-    console.log('distance: ', distance);
-  }
 
   const likeAddition = async () => {
-    const userToken = await AsyncStorage.getItem('UToken');
-    const likeResponse = await addLike({
-      file_id: singleMedia.file_id,
-    }, userToken);
-    console.log(likeResponse);
+    try {
+      const userToken = await AsyncStorage.getItem('UToken');
+      const likeResponse = await addLike({
+        file_id: singleMedia.file_id,
+      }, userToken);
+      console.log(likeResponse);
+    } catch (e) {
+      Toast.show({
+        text: 'You have already liked this post',
+        buttonText: 'Okay',
+        type: 'danger',
+      });
+      console.log('like addition failed: ', e);
+    }
     await updateLikes();
   };
 
@@ -56,7 +62,6 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
 
   const updateLikes = async () => {
     const likesList = await getLikes(singleMedia.file_id);
-    console.log(likesList.length);
     setLikes(likesList.length);
   };
 
@@ -75,9 +80,9 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
           () => {
             const data = {
               file: singleMedia,
-              distance: distance,
+              // distance: distance,
             };
-            navigation.navigate('Single', {file: data});
+            navigation.push('Single', {file: data});
           }}>
           <CardItem cardBody >
             <Image source={{uri: mediaUrl + singleMedia.thumbnails.w640}} style={{height: 250, width: null, flex: 1}} />
@@ -97,17 +102,17 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
               () => {
                 const data = {
                   file: singleMedia,
-                  distance: distance,
+                  // distance: distance,
                 };
-                navigation.navigate('Single', {file: data});
+                navigation.push('Single', {file: data});
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
 
             <Button style={styles.locationBtn} >
               <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-              {distance > 0.1 ? (
-                <Text style={styles.Text}>{Math.round(distance)}km</Text>
+              {singleMedia.distance > 0.1 ? (
+                <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
               ) : (
                   <Text style={styles.Text}>here</Text>
                 )

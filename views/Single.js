@@ -23,6 +23,7 @@ Ulkoasu vaatii työtä
 
 const Single = ({route}) => {
   const {file} = route.params;
+  console.log(file);
   console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
 
@@ -69,7 +70,6 @@ const Single = ({route}) => {
   updateComments();
 
 
-  const descData = JSON.parse(file.file.description);
   console.log('kuva', mediaUrl + file.file.filename);
   // console.log(file.distance);
   return (
@@ -105,8 +105,8 @@ const Single = ({route}) => {
           </CardItem>
           <CardItem>
             <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-            {file.distance > 0.1 ? (
-              <Text>{Math.round(file.distance)}km</Text>
+            {file.file.distance > 0.1 ? (
+              <Text>{Math.round(file.file.distance)}km</Text>
             ) : (
                 <Text>here</Text>
               )
@@ -114,7 +114,7 @@ const Single = ({route}) => {
           </CardItem>
           <CardItem>
             <Text>
-              {descData.description}
+              {file.file.description.description}
             </Text>
           </CardItem>
         </Card>
