@@ -201,7 +201,6 @@ const getLikes = async (id) => {
 const getComments = async (id) => {
   try {
     const response = await fetch(apiUrl + 'comments/file/' + id);
-
     const commentList = await response.json();
     if (response.ok) {
       return commentList;
@@ -216,7 +215,7 @@ const getComments = async (id) => {
 
 const checkUsername = async (username) => {
   try {
-    const response = await fetch(apiUrl+ 'users/username/' +username);
+    const response = await fetch(apiUrl + 'users/username/' + username);
 
     const result = await response.json();
     if (response.ok) {
@@ -239,7 +238,7 @@ const deleteFile = async (fileId, token) => {
     headers: {'x-access-token': token},
   };
   try {
-    const response = await fetch(apiUrl+'media/' + fileId, options);
+    const response = await fetch(apiUrl + 'media/' + fileId, options);
     const result = await response.json();
     if (response.ok) {
       return result;

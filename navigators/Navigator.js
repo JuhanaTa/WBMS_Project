@@ -12,6 +12,7 @@ import Single from '../views/Single';
 import NewItem from '../views/NewItem';
 import {AuthContext} from '../contexts/AuthContext';
 import Login from '../views/Login';
+import Comments from '../views/Comments';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -64,6 +65,12 @@ const StackScreen = () => {
           <Stack.Screen name="Single" component={Single}
             options={{
               title: 'Single', headerStyle: {
+                backgroundColor: '#FF6536',
+              },
+            }} />
+          <Stack.Screen name="Comments" component={Comments}
+            options={{
+              title: 'Comments', headerStyle: {
                 backgroundColor: '#FF6536',
               },
             }} />

@@ -10,6 +10,7 @@ import {
   Content,
   Container,
   Icon,
+  Button,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -21,11 +22,15 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 Ulkoasu vaatii työtä
 */
 
-const Single = ({route}) => {
+const Single = ({route, navigation}) => {
   const {file} = route.params;
   console.log(file);
   console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
+  const [comment, setComment] = useState([]);
+  useEffect(() => {
+    updateComments();
+  }, []);
 
   const handleVideoRef = (component) => {
     setVideoRef(component);
@@ -64,10 +69,15 @@ const Single = ({route}) => {
 
 
   const updateComments = async () => {
-    const commentList = await getComments(file.file.file_id);
-    console.log('COMMENTIT', commentList);
+    try {
+      const commentList = await getComments(file.file.file_id);
+      setComment(commentList);
+      console.log('KOMMENTIT Singlessä', commentList[0]);
+    } catch (e) {
+      console.log(e.message);
+    }
   };
-  updateComments();
+  // console.log('ROSKAA', comment[0].comment);
 
 
   console.log('kuva', mediaUrl + file.file.filename);
@@ -118,8 +128,22 @@ const Single = ({route}) => {
             </Text>
           </CardItem>
         </Card>
+        <Card>
+          <CardItem>
+            <Button onPress={
+              () => {
+                const data = {
+                  file: file,
+                  // distance: distance,
+                };
+                navigation.push('Comments', {file: data.file});
+              }}>
+              <Icon name={'logo-twitch'}></Icon>
+            </Button>
+          </CardItem>
+        </Card>
       </Content>
-    </Container>
+    </Container >
   );
 };
 
@@ -136,6 +160,7 @@ const styles = StyleSheet.create({
 
 Single.propTypes = {
   route: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default Single;
