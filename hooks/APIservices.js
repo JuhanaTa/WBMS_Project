@@ -142,6 +142,7 @@ const getAvatar = async (id) => {
   }
 };
 
+
 const addLike = async (id, token) => {
   const options = {
     method: 'POST',
