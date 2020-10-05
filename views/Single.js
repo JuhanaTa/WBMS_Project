@@ -25,6 +25,10 @@ const Single = ({route}) => {
   const {file} = route.params;
   console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
+  const [comment, setComment] = useState([]);
+  useEffect(() => {
+    updateComments();
+  }, []);
 
   const handleVideoRef = (component) => {
     setVideoRef(component);
@@ -63,10 +67,16 @@ const Single = ({route}) => {
 
 
   const updateComments = async () => {
-    const commentList = await getComments(file.file.file_id);
-    console.log('COMMENTIT', commentList);
+    try {
+      const commentList = await getComments(file.file.file_id);
+      setComment(commentList);
+      console.log('KOMMENTIT', commentList[0]);
+      console.log('TÄÄLLÄ*');
+    } catch (e) {
+      console.log(e.message);
+    }
   };
-  updateComments();
+  console.log('ROSKAA', comment[0].comment);
 
 
   const descData = JSON.parse(file.file.description);
@@ -118,8 +128,13 @@ const Single = ({route}) => {
             </Text>
           </CardItem>
         </Card>
+        <Card>
+          <CardItem>
+            <Text></Text>
+          </CardItem>
+        </Card>
       </Content>
-    </Container>
+    </Container >
   );
 };
 
