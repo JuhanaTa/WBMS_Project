@@ -15,7 +15,7 @@ import {
   ListItem,
 } from 'native-base';
 import List from '../components/List';
-import {getAvatar, setTag, upload} from '../hooks/APIservices';
+import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
@@ -24,32 +24,49 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 const Profile = (props) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(AuthContext);
   const [avatar, setAvatar] = useState([]);
-  const [image, setImage] = useState(null);
-  const [fileType, setFileType] = useState('image');
+  const avatarArray = [];
+  console.log('avatar: ', avatar);
 
-  const uploadMedia = async () => {
+  avatar.forEach((element) => {
+    avatarArray.push(element.file_id);
+    console.log('inside for each');
+  });
+  console.log('avatar array id: ', avatarArray);
+  const uploadMedia = async (result) => {
     const uploadData = new FormData();
-
+    console.log(result);
     uploadData.append('title', 'ProfilePic');
     uploadData.append('description', 'profilePic');
 
-    const filename = image.split('/').pop();
+    const filename = result.uri.split('/').pop();
     const match = /\.(\w+)$/.exec(filename);
-    let type = match ? `${fileType}/${match[1]}` : fileType;
+    let type = match ? `${result.type}/${match[1]}` : result.type;
     if (type === 'image/jpg') type = 'image/jpeg';
 
-    uploadData.append('file', {uri: image, name: filename, type});
+    uploadData.append('file', {uri: result.uri, name: filename, type});
     const userToken = await AsyncStorage.getItem('UToken');
+
+    try {
+      if (avatarArray[0] === undefined) {
+        console.log('nothing to delete');
+      } else {
+        console.log('about to delete this file: ', avatarArray[0]);
+        const result = await deleteFile(avatarArray[0], userToken);
+        console.log(result);
+      }
+    } catch (e) {
+      console.log(e);
+    }
 
     const uploadResp = await upload(uploadData, userToken);
     console.log('file uploaded, next goes tag');
 
     const tagResponse = await setTag({
       file_id: uploadResp.file_id,
-      tag: 'avatar_'+user.user_id,
+      tag: 'avatar_' + user.user_id,
     }, userToken);
 
-    console.log('tag post: '+tagResponse);
+    console.log('tag post: ' + tagResponse);
 
     setTimeout(() => {
       fetchAvatar();
@@ -57,10 +74,10 @@ const Profile = (props) => {
   };
 
   console.log('inside Profile, currently: ' + isLoggedIn);
+  console.log(user);
   const fetchAvatar = async () => {
     try {
       const result = await getAvatar(user.user_id);
-      console.log('result: ', result);
       setAvatar(result);
     } catch (e) {
       console.log(e.message);
@@ -90,9 +107,7 @@ const Profile = (props) => {
         quality: 1,
       });
       if (!result.cancelled) {
-        setImage(result.uri);
-        setFileType(result.type);
-        uploadMedia();
+        uploadMedia(result);
       }
       console.log(result);
     } catch (E) {
@@ -109,14 +124,13 @@ const Profile = (props) => {
     }
   };
 
-
   return (
     <SafeAreaView style={styles.container}>
       <ListItem itemDivider >
-        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar[18].filename : 'http://placekitten.com/200/300'}}
+        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar.pop().filename : 'http://placekitten.com/200/300'}}
           style={styles.profileImage} />
         <Body style={styles.profileBody}>
-          <Text style={{fontSize: 16}}>Name: Tester</Text>
+          <Text style={{fontSize: 16}}>Username: {user.username}</Text>
           <Text style={{fontSize: 16}}>Points: 9000</Text>
           <Button style={styles.btn} title={'change'} onPress={pickImage} />
           <Button style={styles.btn} title={'Log out'} onPress={signOut}
@@ -127,7 +141,7 @@ const Profile = (props) => {
         <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
       </ListItem>
 
-      <List distanceBool={false} navigation={props.navigation} all={false}/>
+      <List distanceBool={false} navigation={props.navigation} all={false} />
 
     </SafeAreaView >
   );

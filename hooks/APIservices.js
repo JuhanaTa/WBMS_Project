@@ -233,6 +233,24 @@ const checkUsername = async (username) => {
   }
 };
 
+const deleteFile = async (fileId, token) => {
+  const options = {
+    method: 'DELETE',
+    headers: {'x-access-token': token},
+  };
+  try {
+    const response = await fetch(apiUrl+'media/' + fileId, options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 
 export {
   useLogin,
@@ -247,5 +265,6 @@ export {
   getComments,
   appIdentifier,
   checkUsername,
+  deleteFile,
   // deleteLike,
 };

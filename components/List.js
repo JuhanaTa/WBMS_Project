@@ -9,10 +9,10 @@ import {AuthContext} from '../contexts/AuthContext';
 import {calculateDistance} from '../hooks/distanceService';
 
 
-const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
+const List = ({navigation, userLatitude, userLongitude, distanceBool, all, filter}) => {
   const {user} = useContext(AuthContext);
   const mediaArray = useLoadMedia(all, user.user_id);
-  const data = [];
+  let data = [];
   mediaArray.sort(function(a, b) {
     return a.file_id - b.file_id;
   });
@@ -21,8 +21,6 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
 
   mediaArray.forEach((element) => {
     const descData = JSON.parse(element.description);
-    console.log('lat: ', descData.latitude);
-    console.log('lon: ', descData.longitude);
     data.push({
       description: descData,
       file_id: element.file_id,
@@ -39,7 +37,17 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
   });
 
 
+  if (all) {
+    if (filter === '') {
+      filter = 30;
+    }
+    data = data.filter(function(e) {
+      return e.distance < filter;
+    });
+  }
+
   return (
+
     <FlatList
       data={data}
       keyExtractor={(item, index) => index.toString()}
@@ -47,6 +55,7 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
         <ListItem singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} distanceBool={distanceBool} />
       }
     />
+
   );
 };
 
@@ -56,6 +65,7 @@ List.propTypes = {
   userLongitude: PropTypes.number,
   distanceBool: PropTypes.bool,
   all: PropTypes.bool,
+  filter: PropTypes.string,
 };
 
 export default List;
