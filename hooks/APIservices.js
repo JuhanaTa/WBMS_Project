@@ -201,7 +201,6 @@ const getLikes = async (id) => {
 const getComments = async (id) => {
   try {
     const response = await fetch(apiUrl + 'comments/file/' + id);
-
     const commentList = await response.json();
     if (response.ok) {
       return commentList;

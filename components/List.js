@@ -13,7 +13,7 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all}) => {
   const {user} = useContext(AuthContext);
   const mediaArray = useLoadMedia(all, user.user_id);
   const data = [];
-  mediaArray.sort(function(a, b) {
+  mediaArray.sort(function (a, b) {
     return a.file_id - b.file_id;
   });
   mediaArray.reverse();

@@ -46,10 +46,10 @@ const Profile = (props) => {
 
     const tagResponse = await setTag({
       file_id: uploadResp.file_id,
-      tag: 'avatar_'+user.user_id,
+      tag: 'avatar_' + user.user_id,
     }, userToken);
 
-    console.log('tag post: '+tagResponse);
+    console.log('tag post: ' + tagResponse);
 
     setTimeout(() => {
       fetchAvatar();
@@ -113,7 +113,7 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ListItem itemDivider >
-        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar[18].filename : 'http://placekitten.com/200/300'}}
+        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar[0].filename : 'http://placekitten.com/200/300'}}
           style={styles.profileImage} />
         <Body style={styles.profileBody}>
           <Text style={{fontSize: 16}}>Name: Tester</Text>
@@ -127,7 +127,7 @@ const Profile = (props) => {
         <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
       </ListItem>
 
-      <List distanceBool={false} navigation={props.navigation} all={false}/>
+      <List distanceBool={false} navigation={props.navigation} all={false} />
 
     </SafeAreaView >
   );

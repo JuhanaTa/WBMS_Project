@@ -53,7 +53,7 @@ const NewItem = ({navigation}) => {
       tag: appIdentifier,
     }, userToken);
 
-    console.log('tag post: '+tagResponse);
+    console.log('tag post: ' + tagResponse);
 
     setTimeout(() => {
       resetInputs();
@@ -144,16 +144,16 @@ const NewItem = ({navigation}) => {
       <Content padder>
         <>
           {fileType === 'image' ?
-              <Image
-                source={{uri: image}}
-                style={{height: 400, width: null, flex: 1}}
-              /> :
-              <Video
-                source={{uri: image}}
-                style={{height: 400, width: null, flex: 1}}
-                useNativeControls={true}
-                resizeMode="cover"
-              />
+            <Image
+              source={{uri: image}}
+              style={{height: 400, width: null, flex: 1}}
+            /> :
+            <Video
+              source={{uri: image}}
+              style={{height: 400, width: null, flex: 1}}
+              useNativeControls={true}
+              resizeMode="cover"
+            />
           }
         </>
         <Form>

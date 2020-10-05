@@ -10,6 +10,7 @@ import {
   Content,
   Container,
   Icon,
+  Button,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -21,7 +22,7 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 Ulkoasu vaatii työtä
 */
 
-const Single = ({route}) => {
+const Single = ({route, navigation}) => {
   const {file} = route.params;
   console.log(file);
   console.log('inside single');
@@ -71,13 +72,12 @@ const Single = ({route}) => {
     try {
       const commentList = await getComments(file.file.file_id);
       setComment(commentList);
-      console.log('KOMMENTIT', commentList[0]);
-      console.log('TÄÄLLÄ*');
+      console.log('KOMMENTIT Singlessä', commentList[0]);
     } catch (e) {
       console.log(e.message);
     }
   };
-  console.log('ROSKAA', comment[0].comment);
+  // console.log('ROSKAA', comment[0].comment);
 
 
   console.log('kuva', mediaUrl + file.file.filename);
@@ -130,7 +130,16 @@ const Single = ({route}) => {
         </Card>
         <Card>
           <CardItem>
-            <Text></Text>
+            <Button onPress={
+              () => {
+                const data = {
+                  file: file,
+                  // distance: distance,
+                };
+                navigation.push('Comments', {file: data.file});
+              }}>
+              <Icon name={'logo-twitch'}></Icon>
+            </Button>
           </CardItem>
         </Card>
       </Content>
@@ -151,6 +160,7 @@ const styles = StyleSheet.create({
 
 Single.propTypes = {
   route: PropTypes.object,
+  navigation: PropTypes.object,
 };
 
 export default Single;

@@ -20,7 +20,6 @@ import {
 import {Image} from 'react-native';
 import {addLike, getLikes} from '../hooks/APIservices';
 import AsyncStorage from '@react-native-community/async-storage';
-import {calculateDistance} from '../hooks/distanceService';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
