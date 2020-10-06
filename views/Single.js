@@ -18,7 +18,6 @@ import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import AsyncStorage from '@react-native-community/async-storage';
 import {addLike, getLikes} from '../hooks/APIservices';
-
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 /*
@@ -49,8 +48,7 @@ const Single = ({route, navigation}) => {
   };
 
   const lock = async () => {
-    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP,
-    );
+    await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   };
 
   useEffect(() => {

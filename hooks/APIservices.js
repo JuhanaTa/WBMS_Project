@@ -286,5 +286,4 @@ export {
   checkUsername,
   deleteFile,
   addComment,
-  // deleteLike,
 };
