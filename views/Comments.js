@@ -67,7 +67,7 @@ const Comments = ({route}) => {
   return (
     <SafeAreaView style={styles.container}>
 
-      <ListItem itemDivider style={{backgroundColor: 'white'}}>
+      <ListItem itemDivider style={{margin: 2}}>
         <Body>
           <FormTextInput
             autoCapitalize="none"
@@ -83,6 +83,7 @@ const Comments = ({route}) => {
       {comments.length === 0 ?
         <Text>No comments in this post</Text> :
         <FlatList
+          style={styles.lista}
           data={comments}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) =>
@@ -90,7 +91,6 @@ const Comments = ({route}) => {
           }
         />
       }
-
     </SafeAreaView >
   );
 };
@@ -98,10 +98,14 @@ const Comments = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
+    padding: 10,
     backgroundColor: '#A9A4A4',
   },
   buttom: {
+  },
+  lista: {
+    paddingTop: 5,
+    padding: 0,
   },
 });
 
