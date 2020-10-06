@@ -95,7 +95,7 @@ const Single = ({route, navigation}) => {
 
 
   return (
-    <Container>
+    <Container style={styles.container}>
       <Content padder>
         <Card>
           <CardItem>
@@ -185,6 +185,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  container: {
+    backgroundColor: '#A9A4A4',
+  }
 });
 
 Single.propTypes = {

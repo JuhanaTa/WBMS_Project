@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import {
   Button,
+  Card,
+  Content,
   Text,
 } from 'native-base';
 import PropTypes from 'prop-types';
@@ -64,33 +66,39 @@ const Comments = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FormTextInput
-        autoCapitalize="none"
-        placeholder="comment"
-        onChangeText={(txt) => handleInputChange('comment', txt)}
-        error={commentErrors.username}
-      />
-      <Button block onPress={doPost}><Text>POST</Text></Button>
+      <Content padder>
+        <Card>
+          <FormTextInput
+            autoCapitalize="none"
+            placeholder="Comment"
+            onChangeText={(txt) => handleInputChange('comment', txt)}
+            error={commentErrors.username}
+          />
+          <Button style={styles.buttom} block onPress={doPost}><Text>POST</Text></Button>
+        </Card>
 
-      {comments.length === 0 ?
-        <Text>No comments in this post</Text> :
-        <FlatList
-          data={comments}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) =>
-            <ListComments singleComment={item}></ListComments>
-          }
-        />
-      }
-    </SafeAreaView>
+        {comments.length === 0 ?
+          <Text>No comments in this post</Text> :
+          <FlatList
+            data={comments}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) =>
+              <ListComments singleComment={item}></ListComments>
+            }
+          />
+        }
+      </Content>
+    </SafeAreaView >
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 22,
+    paddingTop: 0,
     backgroundColor: '#A9A4A4',
+  },
+  buttom: {
   },
 });
 
