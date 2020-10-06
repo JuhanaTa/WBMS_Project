@@ -13,6 +13,7 @@ import NewItem from '../views/NewItem';
 import {AuthContext} from '../contexts/AuthContext';
 import Login from '../views/Login';
 import Comments from '../views/Comments';
+import MapScreen from '../views/MapScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -71,6 +72,12 @@ const StackScreen = () => {
           <Stack.Screen name="Comments" component={Comments}
             options={{
               title: 'Comments', headerStyle: {
+                backgroundColor: '#FF6536',
+              },
+            }} />
+          <Stack.Screen name="Map" component={MapScreen}
+            options={{
+              title: 'Map', headerStyle: {
                 backgroundColor: '#FF6536',
               },
             }} />

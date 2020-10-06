@@ -5,6 +5,9 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
+import {
+  Text,
+} from 'native-base';
 import PropTypes from 'prop-types';
 import {getComments} from '../hooks/APIservices';
 import ListComments from '../components/ListComments';
@@ -31,7 +34,8 @@ const Comments = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-
+      {comments.length === 0 ?
+      <Text>No comments in this post</Text>:
       <FlatList
         data={comments}
         keyExtractor={(item, index) => index.toString()}
@@ -39,7 +43,7 @@ const Comments = ({route}) => {
           <ListComments singleComment={item}></ListComments>
         }
       />
-
+      }
     </SafeAreaView>
   );
 };
