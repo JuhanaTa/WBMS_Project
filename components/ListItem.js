@@ -107,12 +107,20 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
 
-            <Button style={styles.locationBtn} >
+            <Button style={styles.locationBtn} onPress={
+              () => {
+                const data = {
+                  latitude: singleMedia.description.latitude,
+                  longitude: singleMedia.description.longitude,
+                  title: singleMedia.title,
+                };
+                navigation.push('Map', {file: data});
+              }}>
               <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
               {singleMedia.distance > 0.1 ? (
                 <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
               ) : (
-                  <Text style={styles.Text}>here</Text>
+                  <Text>here</Text>
                 )
               }
             </Button>
@@ -146,8 +154,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 0,
   },
-  Text: {
-  },
+
+
 });
 
 

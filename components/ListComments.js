@@ -8,9 +8,7 @@ import {
   Card,
   CardItem,
   Body,
-  Icon,
   Text,
-
 } from 'native-base';
 // url to api
 
@@ -25,40 +23,13 @@ const ListItem = ({singleComment}) => {
         </View>
       </CardItem>
       <CardItem>
-
         <Body style={styles.body2}>
-
           <Text>{singleComment.time_added}</Text>
-
         </Body>
       </CardItem>
     </Card>
-
-
   );
 };
-
-/* <Button style={styles.buttons} onPress={
-            () => {
-              const data = {
-                file: singleMedia,
-                // distance: distance,
-              };
-              navigation.push('Single', {file: data});
-            }}>
-            <Icon style={styles.icon} name={'eye'}></Icon>
-          </Button>*/
-
-/* <Button style={styles.locationBtn} >
-            <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-            {singleMedia.distance > 0.1 ? (
-          <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
-            ) : (
-                <Text style={styles.Text}>here</Text>
-              )
-            }
-          </Button> */
-
 
 const styles = StyleSheet.create({
   title: {

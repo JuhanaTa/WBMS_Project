@@ -50,7 +50,7 @@ const useLoginForm = (callback) => {
     const usernameError = validator('username', inputs.username, constraints);
     const passwordError = validator('password', inputs.password, constraints);
 
-    if (usernameError !== null || passwordError !== null ) {
+    if (usernameError !== null || passwordError !== null) {
       return false;
     } else {
       return true;

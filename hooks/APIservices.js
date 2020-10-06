@@ -212,6 +212,26 @@ const getComments = async (id) => {
   }
 };
 
+const addComment = async (comment, token) => {
+  const options = {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'x-access-token': token},
+    body: JSON.stringify(comment),
+  };
+  try {
+    console.log(comment);
+    const response = await fetch(apiUrl + 'comments', options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 
 const checkUsername = async (username) => {
   try {
@@ -265,5 +285,6 @@ export {
   appIdentifier,
   checkUsername,
   deleteFile,
+  addComment,
   // deleteLike,
 };

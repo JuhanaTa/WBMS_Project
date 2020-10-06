@@ -6,7 +6,7 @@ const FormTextInput = ({style, error, ...otherProps}) => {
   return (
     <View>
       <Item>
-        <Input {...otherProps}/>
+        <Input {...otherProps} />
       </Item>
       {error !== 0 && <Label>{error}</Label>}
     </View>

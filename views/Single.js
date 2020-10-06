@@ -11,10 +11,13 @@ import {
   Container,
   Icon,
   Button,
+  Body,
+  Toast,
 } from 'native-base';
 import {Video} from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
-
+import AsyncStorage from '@react-native-community/async-storage';
+import {addLike, getLikes} from '../hooks/APIservices';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -24,6 +27,7 @@ Ulkoasu vaatii työtä
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
+  const [likes, setLikes] = useState(0);
   console.log(file);
   console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
@@ -50,6 +54,10 @@ const Single = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    updateLikes();
+  }, []);
+
+  useEffect(() => {
     unlock();
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
       console.log('orientation: ', evt);
@@ -63,8 +71,30 @@ const Single = ({route, navigation}) => {
     };
   }, [videoRef]);
 
+  const likeAddition = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('UToken');
+      const likeResponse = await addLike({
+        file_id: file.file.file_id,
+      }, userToken);
+      console.log(likeResponse);
+    } catch (e) {
+      Toast.show({
+        text: 'You have already liked this post',
+        buttonText: 'Okay',
+        type: 'danger',
+      });
+      console.log('like addition failed: ', e);
+    }
+    await updateLikes();
+  };
 
+  const updateLikes = async () => {
+    const likesList = await getLikes(file.file.file_id);
+    setLikes(likesList.length);
+  };
   console.log('kuva', mediaUrl + file.file.filename);
+
 
   return (
     <Container>
@@ -98,32 +128,45 @@ const Single = ({route, navigation}) => {
             </>
           </CardItem>
           <CardItem>
-            <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-            {file.file.distance > 0.1 ? (
-              <Text>{Math.round(file.file.distance)}km</Text>
-            ) : (
-                <Text>here</Text>
-              )
-            }
+            <Body style={styles.body2}>
+              <Button style={styles.locationBtn} onPress={
+                () => {
+                  const data = {
+                    latitude: file.file.description.latitude,
+                    longitude: file.file.description.longitude,
+                    title: file.file.title,
+                  };
+                  navigation.push('Map', {file: data});
+                }}>
+                <Icon transparent style={styles.icon} name={'compass'}></Icon>
+                {file.file.distance > 0.1 ? (
+                  <Text style={styles.Text}>{Math.round(file.file.distance)}km</Text>
+                ) : (
+                    <Text style={styles.Text}>here</Text>
+                  )
+                }
+              </Button>
+              <Button onPress={
+                () => {
+                  const data = {
+                    file: file,
+                  };
+                  navigation.push('Comments', {file: data.file});
+                }}>
+                <Icon style={styles.icon} name={'chatbubbles'}></Icon>
+              </Button>
+
+              <Button style={styles.buttons}
+                onPress={likeAddition}>
+                <Text>{likes}</Text>
+                <Icon style={styles.icon} active name='thumbs-up' />
+              </Button>
+            </Body>
           </CardItem>
           <CardItem>
             <Text>
               {file.file.description.description}
             </Text>
-          </CardItem>
-        </Card>
-        <Card>
-          <CardItem>
-            <Button onPress={
-              () => {
-                const data = {
-                  file: file,
-                  // distance: distance,
-                };
-                navigation.push('Comments', {file: data.file});
-              }}>
-              <Icon name={'logo-twitch'}></Icon>
-            </Button>
           </CardItem>
         </Card>
       </Content>
@@ -139,6 +182,10 @@ const styles = StyleSheet.create({
   icon: {
     color: '#FF421D',
     fontSize: 30,
+  },
+  body2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
