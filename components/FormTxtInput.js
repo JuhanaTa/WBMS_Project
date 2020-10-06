@@ -5,7 +5,7 @@ import {Item, Input, View, Label} from 'native-base';
 const FormTextInput = ({style, error, ...otherProps}) => {
   return (
     <View>
-      <Item>
+      <Item >
         <Input {...otherProps} />
       </Item>
       {error !== 0 && <Label>{error}</Label>}

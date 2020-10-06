@@ -1,8 +1,10 @@
+/* eslint-disable no-undef */
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {
   Image,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import {
   Container,
@@ -10,6 +12,10 @@ import {
   Form,
   Button,
   Text,
+  View,
+  CardItem,
+  Card,
+  Body,
 } from 'native-base';
 import useUploadForm from '../hooks/UploadServices';
 import FormTxtInput from '../components/FormTxtInput';
@@ -19,11 +25,12 @@ import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import {upload, appIdentifier, setTag} from '../hooks/APIservices';
 import {Video} from 'expo-av';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const NewItem = ({navigation}) => {
   const [image, setImage] = useState(null);
   const [fileType, setFileType] = useState('image');
-
+  let height = 0;
   const uploadMedia = async () => {
     const uploadData = new FormData();
     const userLocation = await getLocation();
@@ -82,6 +89,7 @@ const NewItem = ({navigation}) => {
 
   const {
     handleInputChange,
+    uploadErrors,
     inputs,
     reset,
   } = useUploadForm();
@@ -139,61 +147,104 @@ const NewItem = ({navigation}) => {
     getPermissionAsync();
   }, []);
 
+  if (image !== null) {
+    height = 300;
+  }
   return (
     <Container>
       <Content padder>
-        <>
-          {fileType === 'image' ?
-            <Image
-              source={{uri: image}}
-              style={{height: 400, width: null, flex: 1}}
-            /> :
-            <Video
-              source={{uri: image}}
-              style={{height: 400, width: null, flex: 1}}
-              useNativeControls={true}
-              resizeMode="cover"
-            />
-          }
-        </>
-        <Form>
-          <FormTxtInput
-            autoCapitalize="none"
-            placeholder="title"
-            value={inputs.title}
-            onChangeText={(txt) => handleInputChange('title', txt)}
 
-          />
-          <FormTxtInput
-            autoCapitalize="none"
-            placeholder="description"
-            value={inputs.description}
-            onChangeText={(txt) => handleInputChange('description', txt)}
-          />
-        </Form>
+        {image === null ?
+          <TouchableOpacity onPress={pickImage}>
+            <Image source={require('../assets/placeholder-image.png')}
+              style={{height: 300, width: null}} />
+          </TouchableOpacity> :
+          <View>
+            {fileType === 'image' ?
+              <Image
+                source={{uri: image}}
+                style={{height: height, width: null}}
+              /> :
+              <Video
+                source={{uri: image}}
+                style={{height: height, width: null}}
+                useNativeControls={true}
+                resizeMode="cover"
+              />
+            }
+          </View>}
 
-        <Button block
-          onPress={pickImage}>
-          <Text>Pick Media file</Text>
-        </Button>
-        <Button block
-          onPress={launchCamera}>
-          <Text>Take Photo</Text>
-        </Button>
-        <Button block
-          onPress={uploadMedia}>
-          <Text>Upload</Text>
-        </Button>
-        <Button block
-          onPress={resetInputs}>
-          <Text>Reset</Text>
-        </Button>
+        <Card>
+          <CardItem>
+            <Body>
+              <Form style={{alignSelf: 'stretch'}}>
+                <FormTxtInput
+                  autoCapitalize="none"
+                  placeholder="title"
+                  value={inputs.title}
+                  onChangeText={(txt) => handleInputChange('title', txt)}
+                  error={uploadErrors.title}
+
+                />
+                <FormTxtInput
+                  autoCapitalize="none"
+                  placeholder="description"
+                  value={inputs.description}
+                  onChangeText={(txt) => handleInputChange('description', txt)}
+                  error={uploadErrors.description}
+                />
+              </Form>
 
 
+              <View style={styles.buttonsForImage}>
+                <Button block style={styles.imgbtn1}
+                  onPress={pickImage}>
+                  <Text>Pick Media file</Text>
+                </Button>
+                <Button block style={styles.imgbtn2}
+                  onPress={launchCamera}>
+                  <Text>Take Photo</Text>
+                </Button>
+              </View>
+
+              <Button block style={styles.btn}
+                disabled={uploadErrors.title !== null ||
+                  uploadErrors.description !== null || image === null
+                }
+                onPress={uploadMedia}>
+                <Text>Upload</Text>
+              </Button>
+              <Button block style={styles.btn}
+                onPress={resetInputs}>
+                <Text>Reset</Text>
+              </Button>
+            </Body>
+          </CardItem>
+        </Card>
       </Content>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  btn: {
+    marginTop: 5,
+  },
+  buttonsForImage: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  imgbtn1: {
+    flex: 1,
+
+    marginRight: 5,
+  },
+  imgbtn2: {
+    flex: 1,
+    marginLeft: 5,
+
+  },
+});
 
 NewItem.propTypes = {
   navigation: PropTypes.object,
