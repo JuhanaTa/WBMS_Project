@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Text,
@@ -128,8 +129,12 @@ const Profile = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <ListItem itemDivider >
-        <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar.pop().filename : 'http://placekitten.com/200/300'}}
-          style={styles.profileImage} />
+        {avatar.length > 0 ?
+        <Image source={{uri: mediaUrl + avatar.pop().filename}}
+          style={styles.profileImage} />:
+        <Image source={require('../assets/profile.png')}
+          style={styles.profileImage}/>
+        }
         <Body style={styles.profileBody}>
           <Text style={{fontSize: 16}}>
             <Icon style={styles.icon} name={'person'}>
