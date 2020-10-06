@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#A9A4A4',
-  }
+  },
 });
 
 Single.propTypes = {
