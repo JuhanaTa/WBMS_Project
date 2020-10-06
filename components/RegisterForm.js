@@ -41,7 +41,7 @@ const RegisterForm = ({navigation}) => {
   };
 
   return (
-    <View>
+    <View style={{alignSelf: 'stretch'}}>
       <FormTextInput
         autoCapitalize="none"
         placeholder="username"
