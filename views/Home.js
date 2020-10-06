@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import {
-  Form, Item, View, Picker, Icon,
+  Form, Item, View, Picker, Icon, Spinner,
 } from 'native-base';
 
 
@@ -17,8 +17,10 @@ const Home = (props) => {
   const [userLatitude, setUserLatitude] = useState(0);
   const [userLongitude, setUserLongitude] = useState(0);
   const [filter, setFilter] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const getLocation = async () => {
+    setLoader(true);
     try {
       // permission to get user location
       const {status} = await Permissions.askAsync(Permissions.LOCATION);
@@ -27,6 +29,7 @@ const Home = (props) => {
         const userLocation = await Location.getCurrentPositionAsync();
         setUserLatitude(userLocation.coords.latitude);
         setUserLongitude(userLocation.coords.longitude);
+        setLoader(false);
       } else {
         console.log('Permission denied');
       }
@@ -80,9 +83,9 @@ const Home = (props) => {
             </Picker>
           </Item>
         </Form>
-
-
+        {loader && <Spinner style={{alignItems: 'center'}} />}
       </View>
+
       {userLatitude !== 0 &&
         <List navigation={navigation}
           userLatitude={userLatitude}

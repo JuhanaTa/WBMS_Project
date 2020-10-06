@@ -16,6 +16,7 @@ import {
   CardItem,
   Card,
   Body,
+  Spinner,
 } from 'native-base';
 import useUploadForm from '../hooks/UploadServices';
 import FormTxtInput from '../components/FormTxtInput';
@@ -29,43 +30,50 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const NewItem = ({navigation}) => {
   const [image, setImage] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [fileType, setFileType] = useState('image');
   let height = 0;
+
   const uploadMedia = async () => {
-    const uploadData = new FormData();
-    const userLocation = await getLocation();
+    setLoader(true);
+    try {
+      const uploadData = new FormData();
+      const userLocation = await getLocation();
 
-    const descData = {
-      description: inputs.description,
-      latitude: userLocation.coords.latitude,
-      longitude: userLocation.coords.longitude,
-    };
+      const descData = {
+        description: inputs.description,
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+      };
 
-    uploadData.append('title', inputs.title);
-    uploadData.append('description', JSON.stringify(descData));
+      uploadData.append('title', inputs.title);
+      uploadData.append('description', JSON.stringify(descData));
 
-    const filename = image.split('/').pop();
-    const match = /\.(\w+)$/.exec(filename);
-    let type = match ? `${fileType}/${match[1]}` : fileType;
-    if (type === 'image/jpg') type = 'image/jpeg';
+      const filename = image.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      let type = match ? `${fileType}/${match[1]}` : fileType;
+      if (type === 'image/jpg') type = 'image/jpeg';
 
-    uploadData.append('file', {uri: image, name: filename, type});
-    const userToken = await AsyncStorage.getItem('UToken');
+      uploadData.append('file', {uri: image, name: filename, type});
+      const userToken = await AsyncStorage.getItem('UToken');
 
-    const uploadResp = await upload(uploadData, userToken);
-    console.log('file uploaded, next goes tag');
+      const uploadResp = await upload(uploadData, userToken);
+      console.log('file uploaded, next goes tag');
 
-    const tagResponse = await setTag({
-      file_id: uploadResp.file_id,
-      tag: appIdentifier,
-    }, userToken);
+      const tagResponse = await setTag({
+        file_id: uploadResp.file_id,
+        tag: appIdentifier,
+      }, userToken);
 
-    console.log('tag post: ' + tagResponse);
+      console.log('tag post: ' + tagResponse);
 
-    setTimeout(() => {
+
       resetInputs();
       navigation.replace('Home');
-    }, 1500);
+      setLoader(false);
+    } catch (e) {
+      console.log('error: ', e);
+    }
   };
 
   const getLocation = async () => {
@@ -151,7 +159,7 @@ const NewItem = ({navigation}) => {
     height = 300;
   }
   return (
-    <Container>
+    <Container style={{backgroundColor: '#e1e1e1'}}>
       <Content padder>
 
         {image === null ?
@@ -207,17 +215,20 @@ const NewItem = ({navigation}) => {
                 </Button>
               </View>
 
-              <Button block style={styles.btn}
-                disabled={uploadErrors.title !== null ||
-                  uploadErrors.description !== null || image === null
-                }
-                onPress={uploadMedia}>
-                <Text>Upload</Text>
-              </Button>
-              <Button block style={styles.btn}
-                onPress={resetInputs}>
-                <Text>Reset</Text>
-              </Button>
+              <View style={{alignSelf: 'stretch'}}>
+                <Button block style={styles.btn}
+                  disabled={uploadErrors.title !== null ||
+                    uploadErrors.description !== null || image === null
+                  }
+                  onPress={uploadMedia}>
+                  <Text>Upload</Text>
+                </Button>
+                {loader && <Spinner style={{alignItems: 'center'}} />}
+                <Button block style={styles.btn}
+                  onPress={resetInputs}>
+                  <Text>Reset</Text>
+                </Button>
+              </View>
             </Body>
           </CardItem>
         </Card>
