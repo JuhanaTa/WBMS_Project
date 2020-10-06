@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   },
   Text: {
   },
-
 });
 
 
