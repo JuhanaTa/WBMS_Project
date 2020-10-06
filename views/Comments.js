@@ -7,9 +7,9 @@ import {
 } from 'react-native';
 import {
   Button,
-  Card,
-  Content,
   Text,
+  ListItem,
+  Body,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import {addComment, getComments} from '../hooks/APIservices';
@@ -66,8 +66,9 @@ const Comments = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Content padder>
-        <Card>
+
+      <ListItem itemDivider style={{backgroundColor: 'white'}}>
+        <Body>
           <FormTextInput
             autoCapitalize="none"
             placeholder="Comment"
@@ -75,19 +76,21 @@ const Comments = ({route}) => {
             error={commentErrors.username}
           />
           <Button style={styles.buttom} block onPress={doPost}><Text>POST</Text></Button>
-        </Card>
 
-        {comments.length === 0 ?
-          <Text>No comments in this post</Text> :
-          <FlatList
-            data={comments}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) =>
-              <ListComments singleComment={item}></ListComments>
-            }
-          />
-        }
-      </Content>
+        </Body>
+      </ListItem>
+
+      {comments.length === 0 ?
+        <Text>No comments in this post</Text> :
+        <FlatList
+          data={comments}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) =>
+            <ListComments singleComment={item}></ListComments>
+          }
+        />
+      }
+
     </SafeAreaView >
   );
 };
