@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#A9A4A4',
+    backgroundColor: 'white',
   },
   form: {
     width: '100%',
