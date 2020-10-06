@@ -265,5 +265,4 @@ export {
   appIdentifier,
   checkUsername,
   deleteFile,
-  // deleteLike,
 };

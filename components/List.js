@@ -9,7 +9,7 @@ import {AuthContext} from '../contexts/AuthContext';
 import {calculateDistance} from '../hooks/distanceService';
 
 
-const List = ({navigation, userLatitude, userLongitude, distanceBool, all, filter}) => {
+const List = ({navigation, userLatitude, userLongitude, all, filter}) => {
   const {user} = useContext(AuthContext);
   const mediaArray = useLoadMedia(all, user.user_id);
   let data = [];
@@ -52,7 +52,7 @@ const List = ({navigation, userLatitude, userLongitude, distanceBool, all, filte
       data={data}
       keyExtractor={(item, index) => index.toString()}
       renderItem={({item}) =>
-        <ListItem singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} distanceBool={distanceBool} />
+        <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
       }
     />
 
@@ -63,7 +63,6 @@ List.propTypes = {
   navigation: PropTypes.object,
   userLatitude: PropTypes.number,
   userLongitude: PropTypes.number,
-  distanceBool: PropTypes.bool,
   all: PropTypes.bool,
   filter: PropTypes.string,
 };

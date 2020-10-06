@@ -18,13 +18,13 @@ import {
   Toast,
 } from 'native-base';
 import {Image} from 'react-native';
-import {addLike, getLikes} from '../hooks/APIservices';
+import {addLike, getLikes, deleteFile} from '../hooks/APIservices';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 
-const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanceBool}) => {
+const ListItem = ({navigation, singleMedia, all}) => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
@@ -50,13 +50,16 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
     await updateLikes();
   };
 
-  /* const likeDeletion = async () => {
-    const userToken = await AsyncStorage.getItem('UToken');
-    const dislikeResponse = await deleteLike(singleMedia.file_id, userToken);
-    console.log(dislikeResponse);
-    await updateLikes();
+  const deletePost = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('UToken');
+      const result = await deleteFile(singleMedia.file_id, userToken);
+      console.log('delete result: ', result);
+      navigation.replace('Home');
+    } catch (e) {
+      console.log('deletion failed ', e);
+    }
   };
-  */
 
   const updateLikes = async () => {
     const likesList = await getLikes(singleMedia.file_id);
@@ -78,7 +81,6 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
           () => {
             const data = {
               file: singleMedia,
-              // distance: distance,
             };
             navigation.push('Single', {file: data});
           }}>
@@ -100,30 +102,38 @@ const ListItem = ({navigation, singleMedia, userLatitude, userLongitude, distanc
               () => {
                 const data = {
                   file: singleMedia,
-                  // distance: distance,
                 };
                 navigation.push('Single', {file: data});
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
 
-            <Button style={styles.locationBtn} onPress= {
-              () => {
-                const data = {
-                  latitude: singleMedia.description.latitude,
-                  longitude: singleMedia.description.longitude,
-                  title: singleMedia.title,
-                };
-                navigation.push('Map', {file: data});
-              }}>
-              <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
-              {singleMedia.distance > 0.1 ? (
-                <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
-              ) : (
-                  <Text>here</Text>
-                )
-              }
-            </Button>
+            {!all ?
+              <Button style={styles.buttons} onPress={
+                () => {
+                  deletePost();
+                }}>
+                <Text>Del</Text>
+                <Icon style={styles.icon} name={'trash'}></Icon>
+              </Button> :
+              <Button style={styles.locationBtn} onPress={
+                () => {
+                  const data = {
+                    latitude: singleMedia.description.latitude,
+                    longitude: singleMedia.description.longitude,
+                    title: singleMedia.title,
+                  };
+                  navigation.push('Map', {file: data});
+                }}>
+                <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
+                {singleMedia.distance > 0.1 ? (
+                  <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
+                ) : (
+                    <Text>here</Text>
+                  )
+                }
+              </Button>
+            }
 
           </Body>
         </CardItem>
@@ -151,8 +161,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   list: {
-    marginBottom: 5,
-    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
   },
 
 
@@ -162,9 +174,7 @@ const styles = StyleSheet.create({
 ListItem.propTypes = {
   singleMedia: PropTypes.object,
   navigation: PropTypes.object,
-  userLatitude: PropTypes.number,
-  userLongitude: PropTypes.number,
-  distanceBool: PropTypes.bool,
+  all: PropTypes.bool,
 };
 
 export default ListItem;
