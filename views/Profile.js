@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   StyleSheet,
-  Button,
   Image,
   Platform,
 } from 'react-native';
@@ -13,6 +12,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {
   Body,
   ListItem,
+  Button,
+  Icon,
 } from 'native-base';
 import List from '../components/List';
 import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
@@ -130,18 +131,27 @@ const Profile = (props) => {
         <Image source={{uri: avatar.length > 0 ? mediaUrl + avatar.pop().filename : 'http://placekitten.com/200/300'}}
           style={styles.profileImage} />
         <Body style={styles.profileBody}>
-          <Text style={{fontSize: 16}}>Username: {user.username}</Text>
-          <Text style={{fontSize: 16}}>Points: 9000</Text>
-          <Button style={styles.btn} title={'change'} onPress={pickImage} />
-          <Button style={styles.btn} title={'Log out'} onPress={signOut}
-          />
+          <Text style={{fontSize: 16}}>
+            <Icon style={styles.icon} name={'person'}>
+            </Icon>  {user.username}</Text>
+          <Text style={{fontSize: 16, marginBottom: 5}}>
+            <Icon style={styles.icon} name={'at'}>
+            </Icon>  {user.email}</Text>
+          <Button block style={styles.btn} onPress={pickImage}>
+            <Icon style={styles.icon} name={'image'}></Icon>
+            <Text style={styles.btnText}>Change Avatar</Text>
+          </Button>
+          <Button block style={styles.btn} onPress={signOut}>
+            <Icon style={styles.icon} name={'lock'}></Icon>
+            <Text style={styles.btnText}>Log out</Text>
+          </Button>
         </Body>
       </ListItem>
       <ListItem itemDivider style={styles.header} >
         <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
       </ListItem>
 
-      <List distanceBool={false} navigation={props.navigation} all={false} />
+      <List navigation={props.navigation} all={false} />
 
     </SafeAreaView >
   );
@@ -154,27 +164,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#D4D4D4',
   },
   profile: {
-    marginBottom: 5,
     flexDirection: 'row',
     flex: 1,
   },
   profileBody: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginLeft: 5,
   },
   profileImage: {
-    height: 150,
+    height: '100%',
     width: null,
     flex: 1,
   },
   btn: {
-    marginTop: 20,
+    marginTop: 5,
+  },
+  icon: {
+    color: '#FF421D',
+    fontSize: 30,
   },
   header: {
     justifyContent: 'center',
 
+  },
+  btnText: {
+    color: 'white',
   },
 });
 
