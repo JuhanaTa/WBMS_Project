@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 0,
-    backgroundColor: '#A9A4A4',
+    backgroundColor: '#e1e1e1',
   },
   buttom: {
   },

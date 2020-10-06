@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container: {
-    backgroundColor: '#A9A4A4',
+    backgroundColor: '#e1e1e1',
   },
 });
 
