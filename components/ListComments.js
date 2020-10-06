@@ -28,8 +28,6 @@ const ListItem = ({singleComment}) => {
         </Body>
       </CardItem>
     </Card>
-
-
   );
 };
 

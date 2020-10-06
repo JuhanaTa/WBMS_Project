@@ -93,6 +93,7 @@ const Single = ({route, navigation}) => {
   };
   console.log('kuva', mediaUrl + file.file.filename);
 
+
   return (
     <Container>
       <Content padder>

@@ -107,7 +107,6 @@ const ListItem = ({navigation, singleMedia, all}) => {
               }}>
               <Icon style={styles.icon} name={'eye'}></Icon>
             </Button>
-
             {!all ?
               <Button style={styles.buttons} onPress={
                 () => {
@@ -134,7 +133,6 @@ const ListItem = ({navigation, singleMedia, all}) => {
                 }
               </Button>
             }
-
           </Body>
         </CardItem>
       </Card>
