@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: '#D4D4D4',
+    backgroundColor: '#e1e1e1',
   },
   profile: {
     flexDirection: 'row',
