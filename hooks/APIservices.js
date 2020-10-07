@@ -1,36 +1,28 @@
 
-import {useEffect, useState} from 'react';
 import axios from 'axios';
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
 const appIdentifier = 'juhkuTest2';
 
-const useLoadMedia = (all, userId) => {
-  const [mediaArray, setMediaArray] = useState([]);
-  const loadMedia = async () => {
-    try {
-      // const response = await fetch(apiUrl + 'media');
-      const response = await fetch(apiUrl + 'tags/' + appIdentifier);
-      const json = await response.json();
-      const media = await Promise.all(json.map(async (item) => {
-        const resp2 = await fetch(apiUrl + 'media/' + item.file_id);
-        const json2 = await resp2.json();
-        return json2;
-      }));
-      if (all) {
-        setMediaArray(media);
-      } else {
-        setMediaArray(media.filter((item) => item.user_id === userId));
-      }
-    } catch (e) {
-      console.error('media load error: ', e);
+const loadMedia = async (all, userId) => {
+  try {
+    // const response = await fetch(apiUrl + 'media');
+    const response = await fetch(apiUrl + 'tags/' + appIdentifier);
+    const json = await response.json();
+    const media = await Promise.all(json.map(async (item) => {
+      const resp2 = await fetch(apiUrl + 'media/' + item.file_id);
+      const json2 = await resp2.json();
+      return json2;
+    }));
+    if (all) {
+      return media;
+    } else {
+      return media.filter((item) => item.user_id === userId);
     }
-  };
-  useEffect(() => {
-    loadMedia();
-  }, []);
-
-  return mediaArray;
+  } catch (e) {
+    console.error('media load error: ', e);
+  }
 };
+
 
 const useLogin = async (user) => {
   console.log('credentials: ' + user);
@@ -275,7 +267,7 @@ export {
   useLogin,
   tokenCheck,
   useRegistration,
-  useLoadMedia,
+  loadMedia,
   upload,
   setTag,
   getAvatar,

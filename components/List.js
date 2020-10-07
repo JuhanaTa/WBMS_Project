@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable max-len */
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
-import {useLoadMedia} from '../hooks/APIservices';
+import {loadMedia} from '../hooks/APIservices';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
 import {AuthContext} from '../contexts/AuthContext';
@@ -10,14 +10,22 @@ import {calculateDistance} from '../hooks/distanceService';
 
 
 const List = ({navigation, userLatitude, userLongitude, all, filter}) => {
+  const [mediaArray, setMediaArray] = useState([]);
   const {user} = useContext(AuthContext);
-  const mediaArray = useLoadMedia(all, user.user_id);
   let data = [];
-  mediaArray.sort(function(a, b) {
-    return a.file_id - b.file_id;
-  });
-  mediaArray.reverse();
 
+
+  const fetchMedia = async () => {
+    const result = await loadMedia(all, user.user_id);
+    result.sort(function(a, b) {
+      return a.file_id - b.file_id;
+    });
+    result.reverse();
+    setMediaArray(result);
+  };
+  useEffect(() => {
+    fetchMedia();
+  }, []);
 
   mediaArray.forEach((element) => {
     const descData = JSON.parse(element.description);

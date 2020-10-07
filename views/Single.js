@@ -78,7 +78,8 @@ const Single = ({route, navigation}) => {
       console.log(likeResponse);
     } catch (e) {
       Toast.show({
-        text: 'You have already liked this post',
+        duration: 2000,
+        text: 'already liked this post, or it is deleted',
         buttonText: 'Okay',
         type: 'danger',
       });

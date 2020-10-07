@@ -29,7 +29,12 @@ const ListItem = ({navigation, singleMedia, all}) => {
   const [likes, setLikes] = useState(0);
 
   useEffect(() => {
+    const jorma = navigation.addListener('focus', () => {
+      console.log('moro');
+      updateLikes();
+    });
     updateLikes();
+    return jorma;
   }, []);
 
 
@@ -42,7 +47,8 @@ const ListItem = ({navigation, singleMedia, all}) => {
       console.log(likeResponse);
     } catch (e) {
       Toast.show({
-        text: 'You have already liked this post',
+        duration: 2000,
+        text: 'already liked this post, or it is deleted',
         buttonText: 'Okay',
         type: 'danger',
       });
@@ -85,7 +91,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
     const likesList = await getLikes(singleMedia.file_id);
     setLikes(likesList.length);
   };
-
+  const time = Date.parse(singleMedia.time_added);
   return (
     <Content>
       <Card style={styles.list}>
@@ -94,7 +100,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
             <Text style={styles.title}>{singleMedia.title}</Text>
           </Left>
           <Right>
-            <Text>{singleMedia.time_added}</Text>
+            <Text>{time}</Text>
           </Right>
         </CardItem>
         <TouchableOpacity onPress={
