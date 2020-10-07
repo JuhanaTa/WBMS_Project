@@ -127,7 +127,21 @@ const Single = ({route, navigation}) => {
           </CardItem>
           <CardItem>
             <Body style={styles.body2}>
-              <Button style={styles.locationBtn} onPress={
+              <Button style={styles.buttons}
+                onPress={likeAddition}>
+                <Text>{likes}</Text>
+                <Icon style={styles.icon} active name='flame' />
+              </Button>
+              <Button onPress={
+                () => {
+                  const data = {
+                    file: file,
+                  };
+                  navigation.push('Comments', {file: data.file});
+                }}>
+                <Icon style={styles.icon} name={'chatbubbles'}></Icon>
+              </Button>
+              <Button style={styles.buttons} onPress={
                 () => {
                   const data = {
                     latitude: file.file.description.latitude,
@@ -143,21 +157,6 @@ const Single = ({route, navigation}) => {
                     <Text style={styles.Text}>here</Text>
                   )
                 }
-              </Button>
-              <Button onPress={
-                () => {
-                  const data = {
-                    file: file,
-                  };
-                  navigation.push('Comments', {file: data.file});
-                }}>
-                <Icon style={styles.icon} name={'chatbubbles'}></Icon>
-              </Button>
-
-              <Button style={styles.buttons}
-                onPress={likeAddition}>
-                <Text>{likes}</Text>
-                <Icon style={styles.icon} active name='thumbs-up' />
               </Button>
             </Body>
           </CardItem>
@@ -187,6 +186,9 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#e1e1e1',
+  },
+  buttons: {
+    width: '33%',
   },
 });
 

@@ -83,7 +83,7 @@ const Home = (props) => {
             </Picker>
           </Item>
         </Form>
-        {loader && <Spinner style={{alignItems: 'center'}} />}
+        {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
       </View>
 
       {userLatitude !== 0 &&
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    backgroundColor: '#FF6536',
+    backgroundColor: 'white',
     borderTopWidth: 2,
     borderTopColor: 'black',
   },
