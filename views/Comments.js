@@ -26,7 +26,6 @@ const Comments = ({route}) => {
   useEffect(() => {
     updateComments();
   }, []);
-
   const {
     handleInputChange,
     validateOnSend,
@@ -73,9 +72,9 @@ const Comments = ({route}) => {
             autoCapitalize="none"
             placeholder="Comment"
             onChangeText={(txt) => handleInputChange('comment', txt)}
-            error={commentErrors.username}
+            error={commentErrors.comment}
           />
-          <Button style={styles.buttom} block onPress={doPost}><Text>POST</Text></Button>
+          <Button style={styles.buttom} block onPress={doPost}><Text>add comment</Text></Button>
 
         </Body>
       </ListItem>

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {
   Content,
@@ -48,6 +49,25 @@ const ListItem = ({navigation, singleMedia, all}) => {
       console.log('like addition failed: ', e);
     }
     await updateLikes();
+  };
+
+  const deleteAlert = () => {
+    Alert.alert(
+        'Alert',
+        //  body
+        'Are you sure you want to delete this post?',
+        [
+          {
+            text: 'Yes',
+            onPress: () => deletePost(),
+          },
+          {
+            text: 'No',
+            onPress: () => console.log('delete cancelled'), style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+    );
   };
 
   const deletePost = async () => {
@@ -95,7 +115,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
             <Button style={styles.buttons}
               onPress={likeAddition}>
               <Text>{likes}</Text>
-              <Icon style={styles.icon} active name='thumbs-up' />
+              <Icon style={styles.icon} active name='flame' />
             </Button>
 
             <Button style={styles.buttons} onPress={
@@ -110,12 +130,12 @@ const ListItem = ({navigation, singleMedia, all}) => {
             {!all ?
               <Button style={styles.buttons} onPress={
                 () => {
-                  deletePost();
+                  deleteAlert();
                 }}>
                 <Text>Del</Text>
                 <Icon style={styles.icon} name={'trash'}></Icon>
               </Button> :
-              <Button style={styles.locationBtn} onPress={
+              <Button style={styles.buttons} onPress={
                 () => {
                   const data = {
                     latitude: singleMedia.description.latitude,
@@ -126,7 +146,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
                 }}>
                 <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
                 {singleMedia.distance > 0.1 ? (
-                  <Text style={styles.Text}>{Math.round(singleMedia.distance)}km</Text>
+                  <Text>{Math.round(singleMedia.distance)}km</Text>
                 ) : (
                     <Text>here</Text>
                   )
@@ -164,7 +184,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
-
 
 });
 

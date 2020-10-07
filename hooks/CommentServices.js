@@ -6,6 +6,10 @@ const constraints = {
     presence: {
       message: 'Cannot be empty',
     },
+    length: {
+      minimum: 3,
+      message: 'must be at least 3 characters',
+    },
   },
 };
 
@@ -33,7 +37,8 @@ const useCommentForm = (callback) => {
   };
 
   const validateOnSend = () => {
-    const commentError = validator('Comment', inputs.comment, constraints);
+    const commentError = validator('comment', inputs.comment, constraints);
+    console.log('comment error: ', commentErrors);
 
     if (commentError !== null) {
       return false;
