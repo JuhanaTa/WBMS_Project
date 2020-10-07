@@ -116,6 +116,11 @@ const NewItem = ({navigation}) => {
 
   const pickImage = async () => {
     try {
+      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Permission needed in order to open files');
+        return;
+      }
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -134,6 +139,11 @@ const NewItem = ({navigation}) => {
   };
 
   const launchCamera = async () => {
+    const {status} = await Permissions.askAsync(Permissions.CAMERA);
+    if (status !== 'granted') {
+      alert('Cant use camera without permission');
+      return;
+    }
     const options = {
       storageOptions: {
         allowsEditing: true,
@@ -154,7 +164,7 @@ const NewItem = ({navigation}) => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
-        alert('Permission needed in order you to make any uploads');
+        alert('Permission needed in order to make any uploads');
       }
     }
   };
@@ -230,7 +240,8 @@ const NewItem = ({navigation}) => {
                   onPress={uploadMedia}>
                   <Text>Upload</Text>
                 </Button>
-                {loader &&<Spinner color='red' style={{alignItems: 'center'}}/>}
+                {loader &&
+                <Spinner color='red' style={{alignItems: 'center'}}/>}
                 <Button block style={styles.btn}
                   onPress={resetInputs}>
                   <Text>Reset</Text>
