@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import List from '../components/List';
 import PropTypes from 'prop-types';
@@ -10,6 +11,8 @@ import * as Location from 'expo-location';
 import {
   Form, Item, View, Picker, Icon, Spinner,
 } from 'native-base';
+import {AuthContext} from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 const Home = (props) => {
@@ -18,6 +21,7 @@ const Home = (props) => {
   const [userLongitude, setUserLongitude] = useState(0);
   const [filter, setFilter] = useState('');
   const [loader, setLoader] = useState(false);
+  const {setIsLoggedIn} = useContext(AuthContext);
 
   const getLocation = async () => {
     setLoader(true);
@@ -32,6 +36,21 @@ const Home = (props) => {
         setLoader(false);
       } else {
         console.log('Permission denied');
+        Alert.alert(
+            'Alert',
+            //  body
+            'This app needs your location in order to work',
+            [
+              {
+                text: 'Agreed',
+                onPress: () => console.log('agreed'),
+              },
+
+            ],
+            {cancelable: false},
+        );
+        await AsyncStorage.clear();
+        setIsLoggedIn(false);
       }
     } catch (e) {
       console.log(e.message);
@@ -66,7 +85,7 @@ const Home = (props) => {
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
-              style={{width: undefined, color: 'black'}}
+              style={{width: undefined}}
               placeholder="Select your SIM"
               placeholderStyle={{color: '#bfc6ea'}}
               placeholderIconColor="#007aff"
@@ -87,7 +106,9 @@ const Home = (props) => {
       </View>
 
       {userLatitude !== 0 &&
-        <List navigation={navigation}
+        <List
+          Lis
+          navigation={navigation}
           userLatitude={userLatitude}
           userLongitude={userLongitude}
           distanceBool={true}
@@ -115,7 +136,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: 'white',
     borderTopWidth: 2,
-    borderTopColor: 'black',
+    borderTopColor: '#000000',
   },
 });
 

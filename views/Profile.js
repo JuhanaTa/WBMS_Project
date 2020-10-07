@@ -109,6 +109,11 @@ const Profile = (props) => {
 
   const pickImage = async () => {
     try {
+      const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Permission needed in order to open files');
+        return;
+      }
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
