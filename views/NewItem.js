@@ -223,7 +223,7 @@ const NewItem = ({navigation}) => {
                   onPress={uploadMedia}>
                   <Text>Upload</Text>
                 </Button>
-                {loader && <Spinner style={{alignItems: 'center'}} />}
+                {loader &&<Spinner color='red' style={{alignItems: 'center'}}/>}
                 <Button block style={styles.btn}
                   onPress={resetInputs}>
                   <Text>Reset</Text>

@@ -15,6 +15,7 @@ import {
   ListItem,
   Button,
   Icon,
+  Spinner,
 } from 'native-base';
 import List from '../components/List';
 import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
@@ -26,6 +27,7 @@ const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 const Profile = (props) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(AuthContext);
   const [avatar, setAvatar] = useState([]);
+  const [loader, setLoader] = useState(false);
   const avatarArray = [];
   console.log('avatar: ', avatar);
 
@@ -35,44 +37,49 @@ const Profile = (props) => {
   });
   console.log('avatar array id: ', avatarArray);
   const uploadMedia = async (result) => {
-    const uploadData = new FormData();
-    console.log(result);
-    uploadData.append('title', 'ProfilePic');
-    uploadData.append('description', 'profilePic');
-
-    const filename = result.uri.split('/').pop();
-    const match = /\.(\w+)$/.exec(filename);
-    let type = match ? `${result.type}/${match[1]}` : result.type;
-    if (type === 'image/jpg') type = 'image/jpeg';
-
-    uploadData.append('file', {uri: result.uri, name: filename, type});
-    const userToken = await AsyncStorage.getItem('UToken');
-
+    setLoader(true);
     try {
-      if (avatarArray[0] === undefined) {
-        console.log('nothing to delete');
-      } else {
-        console.log('about to delete this file: ', avatarArray[0]);
-        const result = await deleteFile(avatarArray[0], userToken);
-        console.log(result);
+      const uploadData = new FormData();
+      console.log(result);
+      uploadData.append('title', 'ProfilePic');
+      uploadData.append('description', 'profilePic');
+
+      const filename = result.uri.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      let type = match ? `${result.type}/${match[1]}` : result.type;
+      if (type === 'image/jpg') type = 'image/jpeg';
+
+      uploadData.append('file', {uri: result.uri, name: filename, type});
+      const userToken = await AsyncStorage.getItem('UToken');
+
+      try {
+        if (avatarArray[0] === undefined) {
+          console.log('nothing to delete');
+        } else {
+          console.log('about to delete this file: ', avatarArray[0]);
+          const result = await deleteFile(avatarArray[0], userToken);
+          console.log(result);
+        }
+      } catch (e) {
+        console.log(e);
       }
+
+      const uploadResp = await upload(uploadData, userToken);
+      console.log('file uploaded, next goes tag');
+
+      const tagResponse = await setTag({
+        file_id: uploadResp.file_id,
+        tag: 'avatar_' + user.user_id,
+      }, userToken);
+
+      console.log('tag post: ' + tagResponse);
+
+      fetchAvatar();
+      setLoader(false);
     } catch (e) {
       console.log(e);
+      setLoader(false);
     }
-
-    const uploadResp = await upload(uploadData, userToken);
-    console.log('file uploaded, next goes tag');
-
-    const tagResponse = await setTag({
-      file_id: uploadResp.file_id,
-      tag: 'avatar_' + user.user_id,
-    }, userToken);
-
-    console.log('tag post: ' + tagResponse);
-
-    setTimeout(() => {
-      fetchAvatar();
-    }, 1500);
   };
 
   console.log('inside Profile, currently: ' + isLoggedIn);
@@ -130,16 +137,16 @@ const Profile = (props) => {
     <SafeAreaView style={styles.container}>
       <ListItem itemDivider >
         {avatar.length > 0 ?
-        <Image source={{uri: mediaUrl + avatar.pop().filename}}
-          style={styles.profileImage} />:
-        <Image source={require('../assets/profile.png')}
-          style={styles.profileImage}/>
+          <Image source={{uri: mediaUrl + avatar.pop().filename}}
+            style={styles.profileImage} /> :
+          <Image source={require('../assets/profile.png')}
+            style={styles.profileImage} />
         }
         <Body style={styles.profileBody}>
-          <Text style={{fontSize: 16}}>
+          <Text style={{fontSize: 14}}>
             <Icon style={styles.icon} name={'person'}>
             </Icon>  {user.username}</Text>
-          <Text style={{fontSize: 16, marginBottom: 5}}>
+          <Text style={{fontSize: 14, marginBottom: 5}}>
             <Icon style={styles.icon} name={'at'}>
             </Icon>  {user.email}</Text>
           <Button block style={styles.btn} onPress={pickImage}>
@@ -155,7 +162,7 @@ const Profile = (props) => {
       <ListItem itemDivider style={styles.header} >
         <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
       </ListItem>
-
+      {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
       <List navigation={props.navigation} all={false} />
 
     </SafeAreaView >
