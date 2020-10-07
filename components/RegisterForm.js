@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {useRegistration, useLogin} from '../hooks/APIservices';
 import FormTextInput from './FormTxtInput';
 import useRegisterForm from '../hooks/RegisterServices';
-import {Button, Text} from 'native-base';
+import {Button, Text, Toast} from 'native-base';
 
 const RegisterForm = ({navigation}) => {
   // setUser,
@@ -22,6 +22,12 @@ const RegisterForm = ({navigation}) => {
   const doRegister = async () => {
     if (!validateOnSend()) {
       console.log('validate on send failed');
+      Toast.show({
+        duration: 3000,
+        text: 'register inputs invalid, register failed',
+        buttonText: 'Okay',
+        type: 'danger',
+      });
       return;
     }
     try {
@@ -37,6 +43,7 @@ const RegisterForm = ({navigation}) => {
       setUser(userData.user);
     } catch (e) {
       console.log('register error ', e.message);
+      alert('user creation failed');
     }
   };
 
