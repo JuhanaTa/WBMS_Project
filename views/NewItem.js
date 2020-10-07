@@ -17,6 +17,7 @@ import {
   Card,
   Body,
   Spinner,
+  Toast,
 } from 'native-base';
 import useUploadForm from '../hooks/UploadServices';
 import FormTxtInput from '../components/FormTxtInput';
@@ -73,6 +74,12 @@ const NewItem = ({navigation}) => {
       setLoader(false);
     } catch (e) {
       console.log('error: ', e);
+      setLoader(false);
+      Toast.show({
+        duration: 2000,
+        text: 'Upload failed',
+        type: 'danger',
+      });
     }
   };
 

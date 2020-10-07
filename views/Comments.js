@@ -10,6 +10,7 @@ import {
   Text,
   ListItem,
   Body,
+  Toast,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import {addComment, getComments} from '../hooks/APIservices';
@@ -50,6 +51,11 @@ const Comments = ({route}) => {
       updateComments();
     } catch (e) {
       console.log('COMMENT error ', e.message);
+      Toast.show({
+        duration: 3000,
+        text: 'Comment add failed, post may be already removed',
+        type: 'danger',
+      });
     }
   };
 
