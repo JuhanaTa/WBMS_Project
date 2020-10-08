@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
 import React, {useContext, useEffect, useState} from 'react';
 import {
@@ -94,7 +95,7 @@ const Profile = (props) => {
     try {
       const result = await loadMedia(false, user.user_id);
       const avatarResult = await getAvatar(user.user_id);
-      result.sort(function(a, b) {
+      result.sort(function (a, b) {
         return a.file_id - b.file_id;
       });
       result.reverse();
@@ -181,7 +182,7 @@ const Profile = (props) => {
     console.log('this is avatar: ', avatar);
     return (
       <>
-        <ListItem itemDivider >
+        <ListItem itemDivider style={styles.listStyle}>
           {avatar.length !== 0 ?
             <Image source={{uri: mediaUrl + avatar.pop().filename}}
               style={styles.profileImage} /> :
@@ -203,13 +204,12 @@ const Profile = (props) => {
             </Button>
           </Body>
         </ListItem>
-        <ListItem itemDivider><Text style={{fontSize: 16}}>
-          <Icon style={styles.icon} name={'person'}>
-          </Icon>  {user.username}</Text></ListItem>
-        <ListItem itemDivider><Text style={{fontSize: 16}}>
-          <Icon style={styles.icon} name={'at'}>
-          </Icon>  {user.email}</Text></ListItem>
-
+        <ListItem itemDivider style={styles.listStyle}><Text style={styles.iconText}>
+          <Icon style={styles.icon2} name={'person'}>
+          </Icon> {user.username}</Text></ListItem>
+        <ListItem itemDivider style={styles.listStyle}><Text style={styles.iconText}>
+          <Icon style={styles.icon2} name={'at'}>
+          </Icon> {user.email}</Text></ListItem>
       </>
     );
   };
@@ -233,6 +233,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#e1e1e1',
   },
+  listStyle: {
+    backgroundColor: '#FFFFFF',
+  },
   profile: {
     flexDirection: 'row',
     flex: 1,
@@ -250,17 +253,26 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 5,
     marginBottom: 5,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    backgroundColor: '#e1e1e1',
   },
   icon: {
     color: '#FF421D',
     fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
   header: {
     justifyContent: 'center',
-
   },
-  btnText: {
-    color: 'white',
+  icon2: {
+    backgroundColor: '#FFFFFF',
+    color: '#FF421D',
+  },
+  iconText: {
+    fontSize: 16,
+    backgroundColor: '#FFFFFF',
   },
 });
 

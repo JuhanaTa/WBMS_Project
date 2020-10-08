@@ -130,10 +130,10 @@ const Single = ({route, navigation}) => {
             <Body style={styles.body2}>
               <Button style={styles.buttons}
                 onPress={likeAddition}>
-                <Text>{likes}</Text>
+                <Text style={styles.text}>{likes}</Text>
                 <Icon style={styles.icon} active name='flame' />
               </Button>
-              <Button onPress={
+              <Button style={styles.buttons} onPress={
                 () => {
                   const data = {
                     file: file,
@@ -153,9 +153,9 @@ const Single = ({route, navigation}) => {
                 }}>
                 <Icon transparent style={styles.icon} name={'compass'}></Icon>
                 {file.file.distance > 0.1 ? (
-                  <Text style={styles.Text}>{Math.round(file.file.distance)}km</Text>
+                  <Text style={styles.text}>{Math.round(file.file.distance)}km</Text>
                 ) : (
-                    <Text style={styles.Text}>here</Text>
+                    <Text style={styles.text}>here</Text>
                   )
                 }
               </Button>
@@ -189,7 +189,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1e1e1',
   },
   buttons: {
-    width: '33%',
+    color: '#FF421D',
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
+  },
+  text: {
+    backgroundColor: '#e1e1e1',
+    color: '#000000',
   },
 });
 

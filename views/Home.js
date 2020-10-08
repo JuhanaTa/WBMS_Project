@@ -40,17 +40,17 @@ const Home = (props) => {
       } else {
         console.log('Permission denied');
         Alert.alert(
-            'Alert',
-            //  body
-            'This app needs your location in order to work',
-            [
-              {
-                text: 'Agreed',
-                onPress: () => console.log('agreed'),
-              },
+          'Alert',
+          //  body
+          'This app needs your location in order to work',
+          [
+            {
+              text: 'Agreed',
+              onPress: () => console.log('agreed'),
+            },
 
-            ],
-            {cancelable: false},
+          ],
+          {cancelable: false},
         );
         await AsyncStorage.clear();
         setIsLoggedIn(false);
@@ -61,7 +61,7 @@ const Home = (props) => {
   };
   const fetchMedia = async () => {
     const result = await loadMedia(true, user.user_id);
-    result.sort(function(a, b) {
+    result.sort(function (a, b) {
       return a.file_id - b.file_id;
     });
     result.reverse();

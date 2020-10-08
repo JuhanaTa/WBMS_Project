@@ -16,7 +16,6 @@ import {getUserInfo} from '../hooks/APIservices';
 import AsyncStorage from '@react-native-community/async-storage';
 // url to api
 
-
 const ListItem = ({singleComment, updateComments}) => {
   const [commentOwner, setCommentOwner] = useState('');
   const getCommentUser = async () => {

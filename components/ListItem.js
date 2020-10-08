@@ -60,20 +60,20 @@ const ListItem = ({navigation, singleMedia, all}) => {
 
   const deleteAlert = () => {
     Alert.alert(
-        'Alert',
-        //  body
-        'Are you sure you want to delete this post?',
-        [
-          {
-            text: 'Yes',
-            onPress: () => deletePost(),
-          },
-          {
-            text: 'No',
-            onPress: () => console.log('delete cancelled'), style: 'cancel',
-          },
-        ],
-        {cancelable: false},
+      'Alert',
+      //  body
+      'Are you sure you want to delete this post?',
+      [
+        {
+          text: 'Yes',
+          onPress: () => deletePost(),
+        },
+        {
+          text: 'No',
+          onPress: () => console.log('delete cancelled'), style: 'cancel',
+        },
+      ],
+      {cancelable: false},
     );
   };
 
@@ -120,7 +120,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
 
             <Button style={styles.buttons}
               onPress={likeAddition}>
-              <Text>{likes}</Text>
+              <Text style={styles.buttonText}>{likes}</Text>
               <Icon style={styles.icon} active name='flame' />
             </Button>
 
@@ -138,7 +138,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
                 () => {
                   deleteAlert();
                 }}>
-                <Text>Del</Text>
+                <Text style={styles.buttonText}>Del</Text>
                 <Icon style={styles.icon} name={'trash'}></Icon>
               </Button> :
               <Button style={styles.buttons} onPress={
@@ -152,9 +152,9 @@ const ListItem = ({navigation, singleMedia, all}) => {
                 }}>
                 <Icon transparent style={[styles.icon]} name={'compass'}></Icon>
                 {singleMedia.distance > 0.1 ? (
-                  <Text>{Math.round(singleMedia.distance)}km</Text>
+                  <Text style={styles.buttonText}>{Math.round(singleMedia.distance)}km</Text>
                 ) : (
-                    <Text>here</Text>
+                    <Text style={styles.buttonText}>here</Text>
                   )
                 }
               </Button>
@@ -190,7 +190,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
-
+  buttons: {
+    color: '#FF421D',
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
+  },
+  buttonText: {
+    backgroundColor: '#e1e1e1',
+    color: '#000000',
+  },
 });
 
 
