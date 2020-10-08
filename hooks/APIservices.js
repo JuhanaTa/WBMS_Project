@@ -1,8 +1,8 @@
 
 import axios from 'axios';
 const apiUrl = 'http://media.mw.metropolia.fi/wbma/';
-const appIdentifier = 'juhkuTest2';
-
+const appIdentifier = 'litNewsRyhma7';
+// juhkuTest2
 const loadMedia = async (all, userId) => {
   try {
     // const response = await fetch(apiUrl + 'media');
