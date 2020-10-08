@@ -9,7 +9,6 @@ import useLoginForm from '../hooks/LoginServices';
 import {Button, Text} from 'native-base';
 
 const LoginForm = ({navigation}) => {
-  // setUser,
   const {setUser, setIsLoggedIn} = useContext(AuthContext);
   const {
     handleInputChange,
@@ -26,8 +25,8 @@ const LoginForm = ({navigation}) => {
     try {
       const userData = await useLogin(inputs);
       setUser(userData.user);
-      console.log('user: ' + userData);
-      console.log('token: ' + userData.token);
+      // console.log('user: ' + userData);
+      // console.log('token: ' + userData.token);
       await AsyncStorage.setItem('UToken', userData.token);
       setIsLoggedIn(true);
     } catch (e) {
@@ -50,7 +49,6 @@ const LoginForm = ({navigation}) => {
         secureTextEntry={true}
         error={loginErrors.password}
       />
-
       <Button block onPress={doLogin}><Text>login</Text></Button>
     </View>
   );

@@ -84,7 +84,7 @@ const Comments = ({route}) => {
             onChangeText={(txt) => handleInputChange('comment', txt)}
             error={commentErrors.comment}
           />
-          <Button style={styles.buttom} block onPress={doPost}><Text>add comment</Text></Button>
+          <Button style={styles.btn} block onPress={doPost}><Text style={styles.btnText}>add comment</Text></Button>
 
         </Body>
       </ListItem>
@@ -110,7 +110,14 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#e1e1e1',
   },
-  buttom: {
+  btn: {
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    backgroundColor: '#e1e1e1',
+    color: '#000000',
   },
   lista: {
     paddingTop: 5,

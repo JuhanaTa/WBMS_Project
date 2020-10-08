@@ -7,10 +7,8 @@ import PropTypes from 'prop-types';
 import {calculateDistance} from '../hooks/distanceService';
 import {View} from 'native-base';
 
-
 const List = ({navigation, userLatitude, userLongitude, all, filter, dropHeader, profileHeader, mediaArray}) => {
   let data = [];
-
   mediaArray.forEach((element) => {
     const descData = JSON.parse(element.description);
     data.push({
@@ -28,37 +26,36 @@ const List = ({navigation, userLatitude, userLongitude, all, filter, dropHeader,
     });
   });
 
-
   if (all) {
     if (filter === '') {
       filter = 30;
     }
-    data = data.filter(function(e) {
+    data = data.filter(function (e) {
       return e.distance < filter;
     });
   }
-  console.log('inside list');
+  // console.log('inside list');
   return (
     <View>
       {all ?
-      <FlatList
-        ListHeaderComponent={
-          dropHeader()
-        }
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) =>
-          <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
-        }
-      />:
-      <FlatList
-        ListHeaderComponent={ profileHeader() }
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) =>
-          <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
-        }
-      />}
+        <FlatList
+          ListHeaderComponent={
+            dropHeader()
+          }
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) =>
+            <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
+          }
+        /> :
+        <FlatList
+          ListHeaderComponent={profileHeader()}
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) =>
+            <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
+          }
+        />}
     </View>
   );
 };

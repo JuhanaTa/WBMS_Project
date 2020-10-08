@@ -13,7 +13,6 @@ const FormTextInput = ({style, error, ...otherProps}) => {
   );
 };
 
-
 FormTextInput.propTypes = {
   style: PropTypes.func,
   error: PropTypes.string,

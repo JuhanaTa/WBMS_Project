@@ -9,7 +9,6 @@ import useRegisterForm from '../hooks/RegisterServices';
 import {Button, Text, Toast} from 'native-base';
 
 const RegisterForm = ({navigation}) => {
-  // setUser,
   const {setUser, setIsLoggedIn} = useContext(AuthContext);
   const {
     handleInputChange,
@@ -32,7 +31,7 @@ const RegisterForm = ({navigation}) => {
     }
     try {
       const response = await useRegistration(inputs);
-      console.log('new user added');
+      // console.log('new user added');
       console.log(response);
       const userData = await useLogin({
         username: inputs.username,

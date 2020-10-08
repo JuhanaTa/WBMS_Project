@@ -23,7 +23,6 @@ const loadMedia = async (all, userId) => {
   }
 };
 
-
 const useLogin = async (user) => {
   console.log('credentials: ' + user);
   const options = {
@@ -134,7 +133,6 @@ const getAvatar = async (id) => {
   }
 };
 
-
 const addLike = async (id, token) => {
   const options = {
     method: 'POST',
@@ -155,30 +153,9 @@ const addLike = async (id, token) => {
   }
 };
 
-/* const deleteLike = async (id, token) => {
-  console.log('id: ', id);
-  console.log('token: ', token);
-  const options = {
-    method: 'DELETE',
-    headers: {'x-access-token': token},
-  };
-  try {
-    const response = await fetch(apiUrl+'favourites/file/' + id, options);
-    const result = await response.json();
-    if (response.ok) {
-      return result;
-    } else {
-      throw new Error(result.message);
-    }
-  } catch (e) {
-    throw new Error(e.message);
-  }
-}; */
-
 const getLikes = async (id) => {
   try {
     const response = await fetch(apiUrl + 'favourites/file/' + id);
-
     const likesList = await response.json();
     if (response.ok) {
       return likesList;
@@ -223,7 +200,6 @@ const addComment = async (comment, token) => {
     throw new Error(e.message);
   }
 };
-
 
 const checkUsername = async (username) => {
   try {

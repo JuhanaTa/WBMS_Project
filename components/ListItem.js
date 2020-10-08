@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import {Image} from 'react-native';
+import {addLike, getLikes, deleteFile} from '../hooks/APIservices';
+import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
+import {TouchableOpacity, StyleSheet, Alert} from 'react-native';
 import {
   Content,
   Card,
@@ -18,18 +18,12 @@ import {
   Right,
   Toast,
 } from 'native-base';
-import {Image} from 'react-native';
-import {addLike, getLikes, deleteFile} from '../hooks/APIservices';
-import AsyncStorage from '@react-native-community/async-storage';
-import moment from 'moment';
 
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-
 const ListItem = ({navigation, singleMedia, all}) => {
   const [likes, setLikes] = useState(0);
-
   useEffect(() => {
     const listener = navigation.addListener('focus', () => {
       updateLikes();
@@ -37,7 +31,6 @@ const ListItem = ({navigation, singleMedia, all}) => {
     updateLikes();
     return listener;
   }, []);
-
 
   const likeAddition = async () => {
     try {
@@ -115,15 +108,12 @@ const ListItem = ({navigation, singleMedia, all}) => {
           </CardItem>
         </TouchableOpacity>
         <CardItem>
-
           <Body style={styles.body2}>
-
             <Button style={styles.buttons}
               onPress={likeAddition}>
               <Text style={styles.buttonText}>{likes}</Text>
               <Icon style={styles.icon} active name='flame' />
             </Button>
-
             <Button style={styles.buttons} onPress={
               () => {
                 const data = {
@@ -177,10 +167,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   icon: {
-    color: '#FF421D',
-    fontSize: 30,
-  },
-  like: {
     color: '#FF421D',
     fontSize: 30,
   },
