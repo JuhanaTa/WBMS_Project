@@ -37,17 +37,17 @@ const Home = (props) => {
       } else {
         console.log('Permission denied');
         Alert.alert(
-            'Alert',
-            //  body
-            'This app needs your location in order to work',
-            [
-              {
-                text: 'Agreed',
-                onPress: () => console.log('agreed'),
-              },
+          'Alert',
+          //  body
+          'This app needs your location in order to work',
+          [
+            {
+              text: 'Agreed',
+              onPress: () => console.log('agreed'),
+            },
 
-            ],
-            {cancelable: false},
+          ],
+          {cancelable: false},
         );
         await AsyncStorage.clear();
         setIsLoggedIn(false);
