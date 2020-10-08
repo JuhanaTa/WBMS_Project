@@ -7,6 +7,7 @@ import {useLogin} from '../hooks/APIservices';
 import FormTextInput from './FormTxtInput';
 import useLoginForm from '../hooks/LoginServices';
 import {Button, Text} from 'native-base';
+import {Toast} from 'native-base';
 
 const LoginForm = ({navigation}) => {
   const {setUser, setIsLoggedIn} = useContext(AuthContext);
@@ -21,6 +22,12 @@ const LoginForm = ({navigation}) => {
   const doLogin = async () => {
     if (!validateOnSend()) {
       console.log('validate on send failed');
+      Toast.show({
+        duration: 3000,
+        text: 'login inputs invalid, login failed',
+        buttonText: 'Okay',
+        type: 'danger',
+      });
       return;
     }
     try {
