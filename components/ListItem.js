@@ -21,6 +21,7 @@ import {
 import {Image} from 'react-native';
 import {addLike, getLikes, deleteFile} from '../hooks/APIservices';
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from 'moment';
 
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
@@ -99,7 +100,7 @@ const ListItem = ({navigation, singleMedia, all}) => {
             <Text style={styles.title}>{singleMedia.title}</Text>
           </Left>
           <Right>
-            <Text>{singleMedia.time_added}</Text>
+            <Text>{moment(singleMedia.time_added).format('lll')}</Text>
           </Right>
         </CardItem>
         <TouchableOpacity onPress={

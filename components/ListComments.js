@@ -10,6 +10,7 @@ import {
   Body,
   Text,
 } from 'native-base';
+import moment from 'moment';
 // url to api
 
 
@@ -24,7 +25,7 @@ const ListItem = ({singleComment}) => {
       </CardItem>
       <CardItem>
         <Body style={styles.body2}>
-          <Text>{singleComment.time_added}</Text>
+          <Text>{moment(singleComment.time_added).format('lll')}</Text>
         </Body>
       </CardItem>
     </Card>
