@@ -48,7 +48,12 @@ const Comments = ({route}) => {
       const newComment = await addComment(commentObject, userToken);
       console.log('Comment: ' + newComment);
 
-      updateComments();
+      await updateComments();
+      Toast.show({
+        duration: 3000,
+        text: 'Comment added',
+        type: 'success',
+      });
     } catch (e) {
       console.log('COMMENT error ', e.message);
       Toast.show({
@@ -68,7 +73,6 @@ const Comments = ({route}) => {
       console.log(e.message);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
 
@@ -92,7 +96,7 @@ const Comments = ({route}) => {
           data={comments}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) =>
-            <ListComments singleComment={item}></ListComments>
+            <ListComments singleComment={item} updateComments={updateComments}></ListComments>
           }
         />
       }
