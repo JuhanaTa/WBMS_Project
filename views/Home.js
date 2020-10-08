@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-community/async-storage';
+import {loadMedia} from '../hooks/APIservices';
 
 
 const Home = (props) => {
@@ -22,6 +23,8 @@ const Home = (props) => {
   const [filter, setFilter] = useState('');
   const [loader, setLoader] = useState(false);
   const {setIsLoggedIn} = useContext(AuthContext);
+  const [mediaArray, setMediaArray] = useState([]);
+  const {user} = useContext(AuthContext);
 
   const getLocation = async () => {
     setLoader(true);
@@ -56,37 +59,32 @@ const Home = (props) => {
       console.log(e.message);
     }
   };
+  const fetchMedia = async () => {
+    const result = await loadMedia(true, user.user_id);
+    result.sort(function(a, b) {
+      return a.file_id - b.file_id;
+    });
+    result.reverse();
+    setMediaArray(result);
+  };
+
   console.log('filter is: ', filter);
 
   useEffect(() => {
     getLocation();
+    fetchMedia();
   }, []);
 
-  /* <View>
-        <Form style={styles.form}>
-          <Item underline>
-            <Input placeholder="Filter"
-              keyboardType = 'numeric'
-              onChangeText={(text) => setFilter(text)} />
-            <Button><Text>filter</Text></Button>
-          </Item>
-        </Form>
-
-      </View> */
-
-  console.log('latitude in home: ', userLatitude);
-  console.log('longitude in home: ', userLongitude);
-  return (
-    <SafeAreaView style={styles.container}>
+  const dropHeader = () => {
+    return (
       <View>
-
         <Form>
           <Item picker style={styles.dropdown}>
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               style={{width: undefined}}
-              placeholder="Select your SIM"
+              placeholder='select filter'
               placeholderStyle={{color: '#bfc6ea'}}
               placeholderIconColor="#007aff"
               selectedValue={filter}
@@ -102,9 +100,16 @@ const Home = (props) => {
             </Picker>
           </Item>
         </Form>
-        {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
       </View>
+    );
+  };
 
+
+  console.log('latitude in home: ', userLatitude);
+  console.log('longitude in home: ', userLongitude);
+  return (
+    <SafeAreaView style={styles.container}>
+      {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
       {userLatitude !== 0 &&
         <List
           Lis
@@ -113,7 +118,10 @@ const Home = (props) => {
           userLongitude={userLongitude}
           distanceBool={true}
           all={true}
-          filter={filter} />
+          filter={filter}
+          dropHeader={dropHeader}
+          mediaArray={mediaArray}
+        />
       }
     </SafeAreaView>
   );
