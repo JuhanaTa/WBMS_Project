@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -11,10 +12,28 @@ import {
   Text,
 } from 'native-base';
 import moment from 'moment';
+import {getUserInfo} from '../hooks/APIservices';
+import AsyncStorage from '@react-native-community/async-storage';
 // url to api
 
 
-const ListItem = ({singleComment}) => {
+const ListItem = ({singleComment, updateComments}) => {
+  const [commentOwner, setCommentOwner] = useState('');
+  const getCommentUser = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('UToken');
+      const commentUser = await getUserInfo(singleComment.user_id, userToken);
+      console.log(commentUser);
+      setCommentOwner(commentUser);
+      await updateComments();
+    } catch (e) {
+      console.log('comment fetch error: ', e);
+    }
+  };
+  useEffect(() => {
+    getCommentUser();
+  }, []);
+
   console.log('singleComment: ', singleComment.comment);
   return (
     <Card >
@@ -25,9 +44,11 @@ const ListItem = ({singleComment}) => {
       </CardItem>
       <CardItem>
         <Body style={styles.body2}>
+          <Text>by: {commentOwner.username}</Text>
           <Text>{moment(singleComment.time_added).format('lll')}</Text>
         </Body>
       </CardItem>
+
     </Card>
   );
 };
@@ -36,7 +57,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'black',
+    color: '#000000',
   },
   body2: {
     flexDirection: 'row',
@@ -62,6 +83,7 @@ const styles = StyleSheet.create({
 ListItem.propTypes = {
   item: PropTypes.object,
   singleComment: PropTypes.object,
+  updateComments: PropTypes.func,
 };
 
 
