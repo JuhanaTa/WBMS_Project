@@ -1,5 +1,14 @@
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
 import React, {useContext, useEffect, useState} from 'react';
+import List from '../components/List';
+import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import {loadMedia} from '../hooks/APIservices';
+import {AuthContext} from '../contexts/AuthContext';
+import PropTypes from 'prop-types';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Text,
   SafeAreaView,
@@ -7,9 +16,6 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {AuthContext} from '../contexts/AuthContext';
-import PropTypes from 'prop-types';
-import AsyncStorage from '@react-native-community/async-storage';
 import {
   Body,
   ListItem,
@@ -17,11 +23,6 @@ import {
   Icon,
   Spinner,
 } from 'native-base';
-import List from '../components/List';
-import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import {loadMedia} from '../hooks/APIservices';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -30,20 +31,17 @@ const Profile = (props) => {
   const [avatar, setAvatar] = useState([]);
   const [loader, setLoader] = useState(false);
   const [mediaArray, setMediaArray] = useState([]);
-  console.log(mediaArray);
   const avatarArray = [];
-  console.log('avatar: ', avatar);
 
   avatar.forEach((element) => {
     avatarArray.push(element.file_id);
-    console.log('inside for each');
   });
-  console.log('avatar array id: ', avatarArray);
+
+  // uploading avatar function
   const uploadMedia = async (result) => {
     setLoader(true);
     try {
       const uploadData = new FormData();
-      console.log(result);
       uploadData.append('title', 'ProfilePic');
       uploadData.append('description', 'profilePic');
 
@@ -55,21 +53,20 @@ const Profile = (props) => {
       uploadData.append('file', {uri: result.uri, name: filename, type});
       const userToken = await AsyncStorage.getItem('UToken');
 
+      // before post last profile pic is deleted if exist
       try {
         if (avatarArray[0] === undefined) {
           console.log('nothing to delete');
         } else {
-          console.log('about to delete this file: ', avatarArray[0]);
           const result = await deleteFile(avatarArray[0], userToken);
           console.log(result);
         }
       } catch (e) {
         console.log(e);
       }
-
+      // upload itself
       const uploadResp = await upload(uploadData, userToken);
-      console.log('file uploaded, next goes tag');
-
+      // tag to avatar file
       const tagResponse = await setTag({
         file_id: uploadResp.file_id,
         tag: 'avatar_' + user.user_id,
@@ -84,9 +81,6 @@ const Profile = (props) => {
       setLoader(false);
     }
   };
-
-  console.log('inside Profile, currently: ' + isLoggedIn);
-  console.log(user);
 
 
   const fetchMedia = async () => {
@@ -136,14 +130,15 @@ const Profile = (props) => {
       if (!result.cancelled) {
         uploadMedia(result);
       }
-      console.log(result);
     } catch (E) {
       console.log(E);
     }
   };
 
+  // camera open
   const launchCamera = async () => {
     try {
+      // persmissions first asked
       const {status} = await Permissions.askAsync(Permissions.CAMERA);
       if (status !== 'granted') {
         alert('Cant use camera without permission');
@@ -157,16 +152,17 @@ const Profile = (props) => {
           quality: 1,
         },
       };
+      // camera opens here
       const result = await ImagePicker.launchCameraAsync(options);
       if (!result.cancelled) {
         uploadMedia(result);
       }
-      console.log(result);
     } catch (e) {
       console.log(e);
     }
   };
 
+  // Permission asker
   const getPermissionAsync = async () => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -176,12 +172,11 @@ const Profile = (props) => {
     }
   };
 
+  // Header on top of list
   const profileHeader = () => {
-    console.log('profileHeader running');
-    console.log('this is avatar: ', avatar);
     return (
       <>
-        <ListItem itemDivider >
+        <ListItem itemDivider style={styles.listStyle}>
           {avatar.length !== 0 ?
             <Image source={{uri: mediaUrl + avatar.pop().filename}}
               style={styles.profileImage} /> :
@@ -203,17 +198,17 @@ const Profile = (props) => {
             </Button>
           </Body>
         </ListItem>
-        <ListItem itemDivider><Text style={{fontSize: 16}}>
-          <Icon style={styles.icon} name={'person'}>
-          </Icon>  {user.username}</Text></ListItem>
-        <ListItem itemDivider><Text style={{fontSize: 16}}>
-          <Icon style={styles.icon} name={'at'}>
-          </Icon>  {user.email}</Text></ListItem>
-
+        <ListItem itemDivider style={styles.listStyle}><Text style={styles.iconText}>
+          <Icon style={styles.icon2} name={'person'}>
+          </Icon> {user.username}</Text></ListItem>
+        <ListItem itemDivider style={styles.listStyle}><Text style={styles.iconText}>
+          <Icon style={styles.icon2} name={'at'}>
+          </Icon> {user.email}</Text></ListItem>
       </>
     );
   };
 
+  // Profile Header is passed as prop to List
   return (
     <SafeAreaView style={styles.container}>
       {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
@@ -233,9 +228,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#e1e1e1',
   },
-  profile: {
-    flexDirection: 'row',
-    flex: 1,
+  listStyle: {
+    backgroundColor: '#FFFFFF',
   },
   profileBody: {
     flex: 1,
@@ -250,17 +244,23 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 5,
     marginBottom: 5,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    backgroundColor: '#e1e1e1',
   },
   icon: {
     color: '#FF421D',
     fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
-  header: {
-    justifyContent: 'center',
-
+  icon2: {
+    backgroundColor: '#FFFFFF',
+    color: '#FF421D',
   },
-  btnText: {
-    color: 'white',
+  iconText: {
+    fontSize: 16,
+    backgroundColor: '#FFFFFF',
   },
 });
 

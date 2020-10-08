@@ -19,19 +19,19 @@ const useCommentForm = (callback) => {
     comment: '',
   });
 
-  const handleInputChange = (comment, text) => {
-    const error = validator(comment, text, constraints);
-    console.log(comment, text);
+  const handleInputChange = (name, text) => {
+    const error = validator(name, text, constraints);
+    console.log(name, text);
     setCommentErrors((loginErrors) => {
       return {
         ...loginErrors,
-        [comment]: error,
+        [name]: error,
       };
     });
     setInputs((inputs) => {
       return {
         ...inputs,
-        [comment]: text,
+        [name]: text,
       };
     });
   };

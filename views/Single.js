@@ -2,6 +2,10 @@
 import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
+import {Video} from 'expo-av';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import AsyncStorage from '@react-native-community/async-storage';
+import {addLike, getLikes} from '../hooks/APIservices';
 import {
   Card,
   CardItem,
@@ -14,21 +18,12 @@ import {
   Body,
   Toast,
 } from 'native-base';
-import {Video} from 'expo-av';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import AsyncStorage from '@react-native-community/async-storage';
-import {addLike, getLikes} from '../hooks/APIservices';
-const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
-/*
-Ulkoasu vaatii työtä
-*/
+const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
 const Single = ({route, navigation}) => {
   const {file} = route.params;
   const [likes, setLikes] = useState(0);
-  console.log(file);
-  console.log('inside single');
   const [videoRef, setVideoRef] = useState(null);
 
   const handleVideoRef = (component) => {
@@ -43,10 +38,11 @@ const Single = ({route, navigation}) => {
     }
   };
 
+  // orientation unlocked
   const unlock = async () => {
     await ScreenOrientation.unlockAsync();
   };
-
+  // orientation locked
   const lock = async () => {
     await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   };
@@ -56,22 +52,24 @@ const Single = ({route, navigation}) => {
   }, []);
 
   useEffect(() => {
-    unlock();
+    unlock(); // inside single view opens orientation
     const orientSub = ScreenOrientation.addOrientationChangeListener((evt) => {
-      console.log('orientation: ', evt);
       if (evt.orientationInfo.orientation > 2) {
         showVideoInFullScreen();
       }
     });
     return () => {
       ScreenOrientation.removeOrientationChangeListener(orientSub);
-      lock();
+      lock(); // leaving single locks orientation
     };
   }, [videoRef]);
 
+  // adding like
   const likeAddition = async () => {
     try {
+      // token fetch
       const userToken = await AsyncStorage.getItem('UToken');
+      // like addition itself
       const likeResponse = await addLike({
         file_id: file.file.file_id,
       }, userToken);
@@ -85,14 +83,15 @@ const Single = ({route, navigation}) => {
       });
       console.log('like addition failed: ', e);
     }
+    // likes updated and screen updates
     await updateLikes();
   };
 
+  // updates likse
   const updateLikes = async () => {
     const likesList = await getLikes(file.file.file_id);
     setLikes(likesList.length);
   };
-  console.log('kuva', mediaUrl + file.file.filename);
 
 
   return (
@@ -130,10 +129,10 @@ const Single = ({route, navigation}) => {
             <Body style={styles.body2}>
               <Button style={styles.buttons}
                 onPress={likeAddition}>
-                <Text>{likes}</Text>
+                <Text style={styles.text}>{likes}</Text>
                 <Icon style={styles.icon} active name='flame' />
               </Button>
-              <Button onPress={
+              <Button style={styles.buttons} onPress={
                 () => {
                   const data = {
                     file: file,
@@ -153,9 +152,9 @@ const Single = ({route, navigation}) => {
                 }}>
                 <Icon transparent style={styles.icon} name={'compass'}></Icon>
                 {file.file.distance > 0.1 ? (
-                  <Text style={styles.Text}>{Math.round(file.file.distance)}km</Text>
+                  <Text style={styles.text}>{Math.round(file.file.distance)}km</Text>
                 ) : (
-                    <Text style={styles.Text}>here</Text>
+                    <Text style={styles.text}>here</Text>
                   )
                 }
               </Button>
@@ -189,7 +188,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1e1e1',
   },
   buttons: {
-    width: '33%',
+    color: '#FF421D',
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
+  },
+  text: {
+    backgroundColor: '#e1e1e1',
+    color: '#000000',
   },
 });
 

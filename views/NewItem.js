@@ -58,9 +58,9 @@ const NewItem = ({navigation}) => {
       uploadData.append('file', {uri: image, name: filename, type});
       const userToken = await AsyncStorage.getItem('UToken');
 
+      // upload itself
       const uploadResp = await upload(uploadData, userToken);
-      console.log('file uploaded, next goes tag');
-
+      // tag to upload
       const tagResponse = await setTag({
         file_id: uploadResp.file_id,
         tag: appIdentifier,
@@ -90,8 +90,6 @@ const NewItem = ({navigation}) => {
       if (status === 'granted') {
         // get location
         const userLocation = await Location.getCurrentPositionAsync();
-        console.log('location of user');
-        console.log(userLocation);
         return userLocation;
       } else {
         console.log('Permission denied');
@@ -114,13 +112,16 @@ const NewItem = ({navigation}) => {
     setImage(null);
   };
 
+  // image picker, file from phone gallery
   const pickImage = async () => {
     try {
+      // permission asked if not already given
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
         alert('Permission needed in order to open files');
         return;
       }
+      // open gallery
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -138,7 +139,9 @@ const NewItem = ({navigation}) => {
     }
   };
 
+  // camera
   const launchCamera = async () => {
+    // permission asked if not already given
     const {status} = await Permissions.askAsync(Permissions.CAMERA);
     if (status !== 'granted') {
       alert('Cant use camera without permission');
@@ -152,14 +155,15 @@ const NewItem = ({navigation}) => {
         quality: 1,
       },
     };
+    // open camera
     const result = await ImagePicker.launchCameraAsync(options);
     if (!result.cancelled) {
       setImage(result.uri);
       setFileType(result.type);
     }
-    console.log(result);
   };
 
+  // permission ask function
   const getPermissionAsync = async () => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -224,11 +228,11 @@ const NewItem = ({navigation}) => {
               <View style={styles.buttonsForImage}>
                 <Button block style={styles.imgbtn1}
                   onPress={pickImage}>
-                  <Text>Pick Media file</Text>
+                  <Text style={styles.btnText}>Pick Media file</Text>
                 </Button>
                 <Button block style={styles.imgbtn2}
                   onPress={launchCamera}>
-                  <Text>Take Photo</Text>
+                  <Text style={styles.btnText}>Take Photo</Text>
                 </Button>
               </View>
 
@@ -242,15 +246,15 @@ const NewItem = ({navigation}) => {
                   }
                   onPress={uploadMedia}>
                   {uploadErrors.description !== null || image === null ?
-                    <Text></Text>:
-                    <Text style={{color: '#000000'}}></Text>
+                    <Text>upload</Text> :
+                    <Text style={{color: '#000000'}}>upload</Text>
                   }
                 </Button>
                 {loader &&
                   <Spinner color='red' style={{alignItems: 'center'}} />}
                 <Button block style={styles.btn}
                   onPress={resetInputs}>
-                  <Text>Reset</Text>
+                  <Text style={styles.btnText}>Reset</Text>
                 </Button>
               </View>
             </Body>
@@ -264,6 +268,8 @@ const NewItem = ({navigation}) => {
 const styles = StyleSheet.create({
   btn: {
     marginTop: 5,
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
   buttonsForImage: {
     flex: 1,
@@ -271,13 +277,18 @@ const styles = StyleSheet.create({
   },
   imgbtn1: {
     flex: 1,
-
     marginRight: 5,
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
   imgbtn2: {
     flex: 1,
     marginLeft: 5,
-
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    color: '#000000',
   },
 });
 
