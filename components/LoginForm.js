@@ -17,16 +17,17 @@ const LoginForm = ({navigation}) => {
     validateOnSend,
   } = useLoginForm();
 
+  // login function
   const doLogin = async () => {
     if (!validateOnSend()) {
       console.log('validate on send failed');
       return;
     }
     try {
+      // inputs passed as parameters and logged in function itself
       const userData = await useLogin(inputs);
       setUser(userData.user);
-      // console.log('user: ' + userData);
-      // console.log('token: ' + userData.token);
+      // token set
       await AsyncStorage.setItem('UToken', userData.token);
       setIsLoggedIn(true);
     } catch (e) {

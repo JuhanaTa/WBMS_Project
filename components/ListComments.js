@@ -4,65 +4,37 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import {getUserInfo} from '../hooks/APIservices';
 import AsyncStorage from '@react-native-community/async-storage';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
   Card,
   CardItem,
   Body,
   Text,
-  // Button,
-  // Icon,
-  // Toast,
 } from 'native-base';
 
 
 const ListItem = ({singleComment, updateComments}) => {
-  // const {user} = useContext(AuthContext);
   const [commentOwner, setCommentOwner] = useState('');
   const getCommentUser = async () => {
     try {
+      // token fetch
       const userToken = await AsyncStorage.getItem('UToken');
+      // info of user fetched
       const commentUser = await getUserInfo(singleComment.user_id, userToken);
       console.log(commentUser);
       setCommentOwner(commentUser);
+      // comments updated after user resolved
       await updateComments();
     } catch (e) {
       console.log('comment fetch error: ', e);
     }
   };
 
-  /* const deleteComment = async () => {
-    console.log('hello');
-    try {
-      console.log('hello');
-      const userToken = await AsyncStorage.getItem('UToken');
-      const response = await deleteComment(singleComment.comment_id, userToken);
-      console.log(response);
-      Toast.show({
-        duration: 3000,
-        text: 'Comment deleted',
-        type: 'success',
-      });
-    } catch (e) {
-      console.log('error: ', e);
-      Toast.show({
-        duration: 3000,
-        text: 'delete failed',
-        type: 'success',
-      });
-    }
-  }; */
-
-  /* <Button onPress={deleteComment}>
-  <Icon style={styles.icon} active name='trash' /></Button>
-  </> :
-  <Text>{singleComment.comment}</Text>
-    */
+  // resolve comment owner
   useEffect(() => {
     getCommentUser();
   }, []);
 
-  // console.log('singleComment: ', singleComment.comment);
   return (
     <Card >
       <CardItem>
@@ -76,7 +48,6 @@ const ListItem = ({singleComment, updateComments}) => {
           <Text>{moment(singleComment.time_added).format('lll')}</Text>
         </Body>
       </CardItem>
-
     </Card>
   );
 };

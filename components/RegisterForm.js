@@ -30,13 +30,14 @@ const RegisterForm = ({navigation}) => {
       return;
     }
     try {
+      // registration, inputs passed as parameters
       const response = await useRegistration(inputs);
-      // console.log('new user added');
       console.log(response);
       const userData = await useLogin({
         username: inputs.username,
         password: inputs.password,
       });
+      // logs in after register is success and token is set
       await AsyncStorage.setItem('UToken', userData.token);
       setIsLoggedIn(true);
       setUser(userData.user);
