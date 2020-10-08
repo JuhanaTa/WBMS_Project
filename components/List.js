@@ -1,31 +1,15 @@
 /* eslint-disable max-len */
 /* eslint-disable max-len */
-import React, {useContext, useEffect, useState} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
-import {loadMedia} from '../hooks/APIservices';
 import ListItem from './ListItem';
 import PropTypes from 'prop-types';
-import {AuthContext} from '../contexts/AuthContext';
 import {calculateDistance} from '../hooks/distanceService';
+import {View} from 'native-base';
 
 
-const List = ({navigation, userLatitude, userLongitude, all, filter}) => {
-  const [mediaArray, setMediaArray] = useState([]);
-  const {user} = useContext(AuthContext);
+const List = ({navigation, userLatitude, userLongitude, all, filter, dropHeader, profileHeader, mediaArray}) => {
   let data = [];
-
-
-  const fetchMedia = async () => {
-    const result = await loadMedia(all, user.user_id);
-    result.sort(function(a, b) {
-      return a.file_id - b.file_id;
-    });
-    result.reverse();
-    setMediaArray(result);
-  };
-  useEffect(() => {
-    fetchMedia();
-  }, []);
 
   mediaArray.forEach((element) => {
     const descData = JSON.parse(element.description);
@@ -53,17 +37,29 @@ const List = ({navigation, userLatitude, userLongitude, all, filter}) => {
       return e.distance < filter;
     });
   }
-
+  console.log('inside list');
   return (
-
-    <FlatList
-      data={data}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({item}) =>
-        <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
-      }
-    />
-
+    <View>
+      {all ?
+      <FlatList
+        ListHeaderComponent={
+          dropHeader()
+        }
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item}) =>
+          <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
+        }
+      />:
+      <FlatList
+        ListHeaderComponent={ profileHeader() }
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item}) =>
+          <ListItem all={all} singleMedia={item} navigation={navigation} userLatitude={userLatitude} userLongitude={userLongitude} />
+        }
+      />}
+    </View>
   );
 };
 
@@ -73,6 +69,9 @@ List.propTypes = {
   userLongitude: PropTypes.number,
   all: PropTypes.bool,
   filter: PropTypes.string,
+  dropHeader: PropTypes.func,
+  profileHeader: PropTypes.func,
+  mediaArray: PropTypes.array,
 };
 
 export default List;

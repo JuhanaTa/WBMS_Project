@@ -21,6 +21,7 @@ import List from '../components/List';
 import {getAvatar, setTag, upload, deleteFile} from '../hooks/APIservices';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import {loadMedia} from '../hooks/APIservices';
 
 const mediaUrl = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
@@ -28,6 +29,8 @@ const Profile = (props) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(AuthContext);
   const [avatar, setAvatar] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [mediaArray, setMediaArray] = useState([]);
+  console.log(mediaArray);
   const avatarArray = [];
   console.log('avatar: ', avatar);
 
@@ -74,7 +77,7 @@ const Profile = (props) => {
 
       console.log('tag post: ' + tagResponse);
 
-      fetchAvatar();
+      fetchMedia();
       setLoader(false);
     } catch (e) {
       console.log(e);
@@ -84,19 +87,29 @@ const Profile = (props) => {
 
   console.log('inside Profile, currently: ' + isLoggedIn);
   console.log(user);
-  const fetchAvatar = async () => {
+
+
+  const fetchMedia = async () => {
+    setLoader(true);
     try {
-      const result = await getAvatar(user.user_id);
-      setAvatar(result);
+      const result = await loadMedia(false, user.user_id);
+      const avatarResult = await getAvatar(user.user_id);
+      result.sort(function(a, b) {
+        return a.file_id - b.file_id;
+      });
+      result.reverse();
+
+      setLoader(false);
+      setMediaArray(result);
+      setAvatar(avatarResult);
     } catch (e) {
-      console.log(e.message);
+      setLoader(false);
     }
   };
 
-
   useEffect(() => {
-    fetchAvatar();
     getPermissionAsync();
+    fetchMedia();
   }, []);
 
   const signOut = async () => {
@@ -129,6 +142,31 @@ const Profile = (props) => {
     }
   };
 
+  const launchCamera = async () => {
+    try {
+      const {status} = await Permissions.askAsync(Permissions.CAMERA);
+      if (status !== 'granted') {
+        alert('Cant use camera without permission');
+        return;
+      }
+      const options = {
+        storageOptions: {
+          allowsEditing: true,
+          skipBackup: true,
+          path: 'images',
+          quality: 1,
+        },
+      };
+      const result = await ImagePicker.launchCameraAsync(options);
+      if (!result.cancelled) {
+        uploadMedia(result);
+      }
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const getPermissionAsync = async () => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -138,38 +176,53 @@ const Profile = (props) => {
     }
   };
 
+  const profileHeader = () => {
+    console.log('profileHeader running');
+    console.log('this is avatar: ', avatar);
+    return (
+      <>
+        <ListItem itemDivider >
+          {avatar.length !== 0 ?
+            <Image source={{uri: mediaUrl + avatar.pop().filename}}
+              style={styles.profileImage} /> :
+            <Image source={require('../assets/profile.png')}
+              style={styles.profileImage} />
+          }
+          <Body style={styles.profileBody}>
+            <Button block style={styles.btn} onPress={launchCamera}>
+              <Icon style={styles.icon} name={'camera'}></Icon>
+              <Text style={styles.btnText}>Take photo</Text>
+            </Button>
+            <Button block style={styles.btn} onPress={pickImage}>
+              <Icon style={styles.icon} name={'image'}></Icon>
+              <Text style={styles.btnText}>Change Avatar</Text>
+            </Button>
+            <Button block style={styles.btn} onPress={signOut}>
+              <Icon style={styles.icon} name={'lock'}></Icon>
+              <Text style={styles.btnText}>Log out</Text>
+            </Button>
+          </Body>
+        </ListItem>
+        <ListItem itemDivider><Text style={{fontSize: 16}}>
+          <Icon style={styles.icon} name={'person'}>
+          </Icon>  {user.username}</Text></ListItem>
+        <ListItem itemDivider><Text style={{fontSize: 16}}>
+          <Icon style={styles.icon} name={'at'}>
+          </Icon>  {user.email}</Text></ListItem>
+
+      </>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ListItem itemDivider >
-        {avatar.length > 0 ?
-          <Image source={{uri: mediaUrl + avatar.pop().filename}}
-            style={styles.profileImage} /> :
-          <Image source={require('../assets/profile.png')}
-            style={styles.profileImage} />
-        }
-        <Body style={styles.profileBody}>
-          <Text style={{fontSize: 14}}>
-            <Icon style={styles.icon} name={'person'}>
-            </Icon>  {user.username}</Text>
-          <Text style={{fontSize: 14, marginBottom: 5}}>
-            <Icon style={styles.icon} name={'at'}>
-            </Icon>  {user.email}</Text>
-          <Button block style={styles.btn} onPress={pickImage}>
-            <Icon style={styles.icon} name={'image'}></Icon>
-            <Text style={styles.btnText}>Change Avatar</Text>
-          </Button>
-          <Button block style={styles.btn} onPress={signOut}>
-            <Icon style={styles.icon} name={'lock'}></Icon>
-            <Text style={styles.btnText}>Log out</Text>
-          </Button>
-        </Body>
-      </ListItem>
-      <ListItem itemDivider style={styles.header} >
-        <Text style={{fontSize: 18, fontWeight: 'bold'}}>My Posts</Text>
-      </ListItem>
       {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
-      <List navigation={props.navigation} all={false} />
-
+      {mediaArray.length !== [] ?
+        <List navigation={props.navigation} all={false}
+          profileHeader={profileHeader}
+          mediaArray={mediaArray} /> :
+        <Text>laoding</Text>
+      }
     </SafeAreaView >
   );
 };
@@ -196,6 +249,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 5,
+    marginBottom: 5,
   },
   icon: {
     color: '#FF421D',
