@@ -257,6 +257,24 @@ const getUserInfo = async (userId, token) => {
   }
 };
 
+const deleteComment = async (id, token) => {
+  const options = {
+    method: 'DELETE',
+    headers: {'x-access-token': token},
+  };
+  try {
+    const response = await fetch(apiUrl + 'comments/' + id, options);
+    const result = await response.json();
+    if (response.ok) {
+      return result;
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 
 export {
   useLogin,
@@ -274,4 +292,5 @@ export {
   deleteFile,
   addComment,
   getUserInfo,
+  deleteComment,
 };

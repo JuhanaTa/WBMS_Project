@@ -10,10 +10,14 @@ import {
   CardItem,
   Body,
   Text,
+  // Button,
+  // Icon,
+  // Toast,
 } from 'native-base';
 
 
 const ListItem = ({singleComment, updateComments}) => {
+  // const {user} = useContext(AuthContext);
   const [commentOwner, setCommentOwner] = useState('');
   const getCommentUser = async () => {
     try {
@@ -26,6 +30,34 @@ const ListItem = ({singleComment, updateComments}) => {
       console.log('comment fetch error: ', e);
     }
   };
+
+  /* const deleteComment = async () => {
+    console.log('hello');
+    try {
+      console.log('hello');
+      const userToken = await AsyncStorage.getItem('UToken');
+      const response = await deleteComment(singleComment.comment_id, userToken);
+      console.log(response);
+      Toast.show({
+        duration: 3000,
+        text: 'Comment deleted',
+        type: 'success',
+      });
+    } catch (e) {
+      console.log('error: ', e);
+      Toast.show({
+        duration: 3000,
+        text: 'delete failed',
+        type: 'success',
+      });
+    }
+  }; */
+
+  /* <Button onPress={deleteComment}>
+  <Icon style={styles.icon} active name='trash' /></Button>
+  </> :
+  <Text>{singleComment.comment}</Text>
+    */
   useEffect(() => {
     getCommentUser();
   }, []);
@@ -34,9 +66,9 @@ const ListItem = ({singleComment, updateComments}) => {
   return (
     <Card >
       <CardItem>
-        <View>
+        <Body style={styles.body2}>
           <Text>{singleComment.comment}</Text>
-        </View>
+        </Body>
       </CardItem>
       <CardItem>
         <Body style={styles.body2}>

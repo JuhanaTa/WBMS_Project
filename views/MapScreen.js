@@ -10,7 +10,6 @@ import MapView from 'react-native-maps';
 
 const MapScreen = ({route}) => {
   const {file} = route.params;
-  console.log(file);
   const latitude = file.latitude;
   const longitude = file.longitude;
   const title = file.title;

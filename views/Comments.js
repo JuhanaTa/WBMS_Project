@@ -1,5 +1,11 @@
 /* eslint-disable max-len */
 import React, {useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
+import {addComment, getComments} from '../hooks/APIservices';
+import ListComments from '../components/ListComments';
+import FormTextInput from '../components/FormTxtInput';
+import useCommentForm from '../hooks/CommentServices';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,17 +18,10 @@ import {
   Body,
   Toast,
 } from 'native-base';
-import PropTypes from 'prop-types';
-import {addComment, getComments} from '../hooks/APIservices';
-import ListComments from '../components/ListComments';
-import FormTextInput from '../components/FormTxtInput';
-import useCommentForm from '../hooks/CommentServices';
-import AsyncStorage from '@react-native-community/async-storage';
 
 
 const Comments = ({route}) => {
   const {file} = route.params;
-  console.log('Kommentit tiedosto', file);
   const [comments, setComment] = useState([]);
   useEffect(() => {
     updateComments();
@@ -34,7 +33,9 @@ const Comments = ({route}) => {
     commentErrors,
   } = useCommentForm();
 
+  // Comment post
   const doPost = async () => {
+    // validation
     if (!validateOnSend()) {
       console.log('validate on send failed');
       return;
@@ -45,9 +46,10 @@ const Comments = ({route}) => {
         comment: inputs.comment,
       };
       const userToken = await AsyncStorage.getItem('UToken');
+      // upload itself
       const newComment = await addComment(commentObject, userToken);
       console.log('Comment: ' + newComment);
-
+      // after upload update
       await updateComments();
       Toast.show({
         duration: 3000,
@@ -66,16 +68,15 @@ const Comments = ({route}) => {
 
   const updateComments = async () => {
     try {
+      // fetches comments and they are added to comments state
       const cL = await getComments(file.file.file_id);
       setComment(cL);
-      console.log('KOMMENTIT###', cL);
     } catch (e) {
       console.log(e.message);
     }
   };
   return (
     <SafeAreaView style={styles.container}>
-
       <ListItem itemDivider style={{margin: 2}}>
         <Body>
           <FormTextInput
@@ -85,10 +86,8 @@ const Comments = ({route}) => {
             error={commentErrors.comment}
           />
           <Button style={styles.btn} block onPress={doPost}><Text style={styles.btnText}>add comment</Text></Button>
-
         </Body>
       </ListItem>
-
       {comments.length === 0 ?
         <Text>No comments in this post</Text> :
         <FlatList
