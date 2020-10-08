@@ -85,10 +85,9 @@ const Comments = ({route}) => {
             onChangeText={(txt) => handleInputChange('comment', txt)}
             error={commentErrors.comment}
           />
-          <Button block onPress={doPost}><Text>add comment</Text></Button>
+          <Button style={styles.btn} block onPress={doPost}><Text style={styles.btnText}>add comment</Text></Button>
         </Body>
       </ListItem>
-
       {comments.length === 0 ?
         <Text>No comments in this post</Text> :
         <FlatList
@@ -110,7 +109,15 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#e1e1e1',
   },
-
+  btn: {
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    backgroundColor: '#e1e1e1',
+    color: '#000000',
+  },
   lista: {
     paddingTop: 5,
     padding: 0,

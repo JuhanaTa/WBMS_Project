@@ -8,7 +8,6 @@ const validator = (field, value, constraints) => {
   } else {
     object = value;
   }
-
   const constraint = constraints[field];
   const result = validate(object, {[field]: constraint});
   if (result) {

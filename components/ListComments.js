@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  // Alert,
-} from 'react-native';
+import moment from 'moment';
+import {getUserInfo} from '../hooks/APIservices';
+import AsyncStorage from '@react-native-community/async-storage';
+import {View, StyleSheet} from 'react-native';
 import {
   Card,
   CardItem,
@@ -14,11 +14,7 @@ import {
   // Icon,
   // Toast,
 } from 'native-base';
-import moment from 'moment';
-import {getUserInfo} from '../hooks/APIservices';
-import AsyncStorage from '@react-native-community/async-storage';
-// import {AuthContext} from '../contexts/AuthContext';
-// url to api
+
 
 const ListItem = ({singleComment, updateComments}) => {
   // const {user} = useContext(AuthContext);
@@ -66,7 +62,7 @@ const ListItem = ({singleComment, updateComments}) => {
     getCommentUser();
   }, []);
 
-  console.log('singleComment: ', singleComment.comment);
+  // console.log('singleComment: ', singleComment.comment);
   return (
     <Card >
       <CardItem>
@@ -86,30 +82,10 @@ const ListItem = ({singleComment, updateComments}) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000000',
-  },
   body2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  icon: {
-    color: '#FF421D',
-    fontSize: 20,
-  },
-  like: {
-    color: '#FF421D',
-    fontSize: 30,
-  },
-  list: {
-    marginBottom: 5,
-    marginTop: 0,
-  },
-  Text: {
-  },
-
 });
 
 ListItem.propTypes = {
