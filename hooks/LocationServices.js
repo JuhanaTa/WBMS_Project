@@ -1,6 +1,8 @@
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 
+// finds out user location
+
 const getLocation = async () => {
   try {
     // permission to get user location

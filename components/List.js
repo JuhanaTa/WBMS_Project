@@ -11,6 +11,7 @@ const List = ({navigation, userLatitude, userLongitude, all, filter, dropHeader,
   let data = [];
   mediaArray.forEach((element) => {
     const descData = JSON.parse(element.description);
+    // new data object created which contains distance and parsed desc
     data.push({
       description: descData,
       file_id: element.file_id,
@@ -27,14 +28,15 @@ const List = ({navigation, userLatitude, userLongitude, all, filter, dropHeader,
   });
 
   if (all) {
+    // default filter is 30km
     if (filter === '') {
       filter = 30;
     }
-    data = data.filter(function (e) {
+    // filter functionality
+    data = data.filter(function(e) {
       return e.distance < filter;
     });
   }
-  // console.log('inside list');
   return (
     <View>
       {all ?

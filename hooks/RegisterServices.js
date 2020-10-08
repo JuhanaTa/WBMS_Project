@@ -33,6 +33,9 @@ const constraints = {
     },
   },
   full_name: {
+    presence: {
+      message: 'Cannot be empty',
+    },
     length: {
       minimum: 3,
       message: 'must be at least 3 characters',
