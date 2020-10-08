@@ -237,11 +237,17 @@ const NewItem = ({navigation}) => {
                   disabled={uploadErrors.title !== null ||
                     uploadErrors.description !== null || image === null
                   }
+                  transparent={uploadErrors.title !== null ||
+                    uploadErrors.description !== null || image === null
+                  }
                   onPress={uploadMedia}>
-                  <Text>Upload</Text>
+                  {uploadErrors.description !== null || image === null ?
+                    <Text></Text>:
+                    <Text style={{color: '#000000'}}></Text>
+                  }
                 </Button>
                 {loader &&
-                <Spinner color='red' style={{alignItems: 'center'}}/>}
+                  <Spinner color='red' style={{alignItems: 'center'}} />}
                 <Button block style={styles.btn}
                   onPress={resetInputs}>
                   <Text>Reset</Text>
