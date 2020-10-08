@@ -61,7 +61,7 @@ const Home = (props) => {
   };
   const fetchMedia = async () => {
     const result = await loadMedia(true, user.user_id);
-    result.sort(function(a, b) {
+    result.sort(function (a, b) {
       return a.file_id - b.file_id;
     });
     result.reverse();

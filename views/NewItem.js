@@ -224,11 +224,11 @@ const NewItem = ({navigation}) => {
               <View style={styles.buttonsForImage}>
                 <Button block style={styles.imgbtn1}
                   onPress={pickImage}>
-                  <Text>Pick Media file</Text>
+                  <Text style={styles.btnText}>Pick Media file</Text>
                 </Button>
                 <Button block style={styles.imgbtn2}
                   onPress={launchCamera}>
-                  <Text>Take Photo</Text>
+                  <Text style={styles.btnText}>Take Photo</Text>
                 </Button>
               </View>
 
@@ -237,14 +237,20 @@ const NewItem = ({navigation}) => {
                   disabled={uploadErrors.title !== null ||
                     uploadErrors.description !== null || image === null
                   }
+                  transparent={uploadErrors.title !== null ||
+                    uploadErrors.description !== null || image === null
+                  }
                   onPress={uploadMedia}>
-                  <Text>Upload</Text>
+                  {uploadErrors.description !== null || image === null ?
+                    <Text>upload</Text> :
+                    <Text style={{color: '#000000'}}>upload</Text>
+                  }
                 </Button>
                 {loader &&
-                <Spinner color='red' style={{alignItems: 'center'}}/>}
+                  <Spinner color='red' style={{alignItems: 'center'}} />}
                 <Button block style={styles.btn}
                   onPress={resetInputs}>
-                  <Text>Reset</Text>
+                  <Text style={styles.btnText}>Reset</Text>
                 </Button>
               </View>
             </Body>
@@ -258,6 +264,8 @@ const NewItem = ({navigation}) => {
 const styles = StyleSheet.create({
   btn: {
     marginTop: 5,
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
   buttonsForImage: {
     flex: 1,
@@ -265,13 +273,18 @@ const styles = StyleSheet.create({
   },
   imgbtn1: {
     flex: 1,
-
     marginRight: 5,
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
   },
   imgbtn2: {
     flex: 1,
     marginLeft: 5,
-
+    fontSize: 30,
+    backgroundColor: '#e1e1e1',
+  },
+  btnText: {
+    color: '#000000',
   },
 });
 
