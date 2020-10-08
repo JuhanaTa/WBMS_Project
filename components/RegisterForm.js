@@ -17,6 +17,7 @@ const RegisterForm = ({navigation}) => {
     validateOnSend,
     checkUserAvailable,
   } = useRegisterForm();
+  let confirmPasswordText = '';
 
   const doRegister = async () => {
     if (!validateOnSend()) {
@@ -31,6 +32,8 @@ const RegisterForm = ({navigation}) => {
     }
     try {
       // registration, inputs passed as parameters
+      console.log('inputs log: ', inputs);
+      confirmPasswordText = inputs.confirmPassword;
       const response = await useRegistration(inputs);
       console.log(response);
       const userData = await useLogin({
@@ -43,6 +46,7 @@ const RegisterForm = ({navigation}) => {
       setUser(userData.user);
     } catch (e) {
       console.log('register error ', e.message);
+      handleInputChange('confirmPassword', confirmPasswordText);
       alert('user creation failed');
     }
   };

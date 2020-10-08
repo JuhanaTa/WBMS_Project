@@ -33,13 +33,6 @@ const constraints = {
     },
   },
   full_name: {
-    presence: {
-      message: 'Cannot be empty',
-    },
-    length: {
-      minimum: 3,
-      message: 'must be at least 3 characters',
-    },
   },
 };
 
@@ -93,13 +86,6 @@ const useSignUpForm = (callback) => {
         return false;
       }
     }
-    inputs= {
-      username: '',
-      password: '',
-      confirmPassword: '',
-      email: '',
-      full_name: '',
-    };
     return true;
   };
 
