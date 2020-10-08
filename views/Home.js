@@ -1,20 +1,19 @@
 import React, {useState, useEffect, useContext} from 'react';
+import List from '../components/List';
+import PropTypes from 'prop-types';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import {AuthContext} from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-community/async-storage';
+import {loadMedia} from '../hooks/APIservices';
 import {
   SafeAreaView,
   StyleSheet,
   Alert,
 } from 'react-native';
-import List from '../components/List';
-import PropTypes from 'prop-types';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
 import {
   Form, Item, View, Picker, Icon, Spinner,
 } from 'native-base';
-import {AuthContext} from '../contexts/AuthContext';
-import AsyncStorage from '@react-native-community/async-storage';
-import {loadMedia} from '../hooks/APIservices';
-
 
 const Home = (props) => {
   const {navigation} = props;
@@ -26,6 +25,8 @@ const Home = (props) => {
   const [mediaArray, setMediaArray] = useState([]);
   const {user} = useContext(AuthContext);
 
+
+  // resolve user location
   const getLocation = async () => {
     setLoader(true);
     try {
@@ -40,18 +41,19 @@ const Home = (props) => {
       } else {
         console.log('Permission denied');
         Alert.alert(
-          'Alert',
-          //  body
-          'This app needs your location in order to work',
-          [
-            {
-              text: 'Agreed',
-              onPress: () => console.log('agreed'),
-            },
+            'Alert',
+            //  body
+            'This app needs your location in order to work',
+            [
+              {
+                text: 'Agreed',
+                onPress: () => console.log('agreed'),
+              },
 
-          ],
-          {cancelable: false},
+            ],
+            {cancelable: false},
         );
+        // if permission to locate user is not given, user is logged out
         await AsyncStorage.clear();
         setIsLoggedIn(false);
       }
@@ -59,22 +61,22 @@ const Home = (props) => {
       console.log(e.message);
     }
   };
+
   const fetchMedia = async () => {
-    const result = await loadMedia(true, user.user_id);
-    result.sort(function (a, b) {
+    const result = await loadMedia(true, user.user_id); // fetces all post media
+    result.sort(function(a, b) {
       return a.file_id - b.file_id;
     });
     result.reverse();
     setMediaArray(result);
   };
 
-  console.log('filter is: ', filter);
-
   useEffect(() => {
     getLocation();
     fetchMedia();
   }, []);
 
+  // km Filter, dropdown menu
   const dropHeader = () => {
     return (
       <View>
@@ -104,15 +106,11 @@ const Home = (props) => {
     );
   };
 
-
-  console.log('latitude in home: ', userLatitude);
-  console.log('longitude in home: ', userLongitude);
   return (
     <SafeAreaView style={styles.container}>
       {loader && <Spinner color='red' style={{alignItems: 'center'}} />}
       {userLatitude !== 0 &&
         <List
-          Lis
           navigation={navigation}
           userLatitude={userLatitude}
           userLongitude={userLongitude}
@@ -132,13 +130,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: '#e1e1e1',
-  },
-  form: {
-    width: '100%',
-
-  },
-  filterContainer: {
-    flexDirection: 'row',
   },
 
   dropdown: {

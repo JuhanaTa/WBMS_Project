@@ -58,9 +58,9 @@ const NewItem = ({navigation}) => {
       uploadData.append('file', {uri: image, name: filename, type});
       const userToken = await AsyncStorage.getItem('UToken');
 
+      // upload itself
       const uploadResp = await upload(uploadData, userToken);
-      console.log('file uploaded, next goes tag');
-
+      // tag to upload
       const tagResponse = await setTag({
         file_id: uploadResp.file_id,
         tag: appIdentifier,
@@ -90,8 +90,6 @@ const NewItem = ({navigation}) => {
       if (status === 'granted') {
         // get location
         const userLocation = await Location.getCurrentPositionAsync();
-        console.log('location of user');
-        console.log(userLocation);
         return userLocation;
       } else {
         console.log('Permission denied');
@@ -114,13 +112,16 @@ const NewItem = ({navigation}) => {
     setImage(null);
   };
 
+  // image picker, file from phone gallery
   const pickImage = async () => {
     try {
+      // permission asked if not already given
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
         alert('Permission needed in order to open files');
         return;
       }
+      // open gallery
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -138,7 +139,9 @@ const NewItem = ({navigation}) => {
     }
   };
 
+  // camera
   const launchCamera = async () => {
+    // permission asked if not already given
     const {status} = await Permissions.askAsync(Permissions.CAMERA);
     if (status !== 'granted') {
       alert('Cant use camera without permission');
@@ -152,14 +155,15 @@ const NewItem = ({navigation}) => {
         quality: 1,
       },
     };
+    // open camera
     const result = await ImagePicker.launchCameraAsync(options);
     if (!result.cancelled) {
       setImage(result.uri);
       setFileType(result.type);
     }
-    console.log(result);
   };
 
+  // permission ask function
   const getPermissionAsync = async () => {
     if (Platform.OS !== 'web') {
       const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);

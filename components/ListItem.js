@@ -60,20 +60,20 @@ const ListItem = ({navigation, singleMedia, all}) => {
 
   const deleteAlert = () => {
     Alert.alert(
-      'Alert',
-      //  body
-      'Are you sure you want to delete this post?',
-      [
-        {
-          text: 'Yes',
-          onPress: () => deletePost(),
-        },
-        {
-          text: 'No',
-          onPress: () => console.log('delete cancelled'), style: 'cancel',
-        },
-      ],
-      {cancelable: false},
+        'Alert',
+        //  body
+        'Are you sure you want to delete this post?',
+        [
+          {
+            text: 'Yes',
+            onPress: () => deletePost(),
+          },
+          {
+            text: 'No',
+            onPress: () => console.log('delete cancelled'), style: 'cancel',
+          },
+        ],
+        {cancelable: false},
     );
   };
 

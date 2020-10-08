@@ -13,18 +13,15 @@ import {
 } from 'react-native';
 
 const Login = (props) => { // props is needed for navigation
-  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(AuthContext);
+  const {setIsLoggedIn, setUser} = useContext(AuthContext);
   const [showReg, setShowReg] = useState(true);
 
 
   const getToken = async () => {
     const userToken = await AsyncStorage.getItem('UToken');
-    console.log('logged in?: ' + isLoggedIn);
-    console.log('token', userToken);
     if (userToken) {
       try {
         const userData = await tokenCheck(userToken);
-        console.log('token valid', userData);
         setIsLoggedIn(true);
         setUser(userData);
       } catch (e) {
