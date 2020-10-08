@@ -262,6 +262,25 @@ const deleteFile = async (fileId, token) => {
   }
 };
 
+const getUserInfo = async (userId, token) => {
+  const options = {
+    method: 'GET',
+    headers: {'x-access-token': token},
+  };
+  try {
+    const response = await fetch(apiUrl + 'users/' + userId, options);
+
+    const likesList = await response.json();
+    if (response.ok) {
+      return likesList;
+    } else {
+      throw new Error('get User info error');
+    }
+  } catch (e) {
+    throw new Error('get User info error', e.message);
+  }
+};
+
 
 export {
   useLogin,
@@ -278,4 +297,5 @@ export {
   checkUsername,
   deleteFile,
   addComment,
+  getUserInfo,
 };
